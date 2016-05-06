@@ -84,7 +84,6 @@ public class PlayerData {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//TO DO pref
 	}
 	
 	private void loadEffects() {
@@ -145,7 +144,6 @@ public class PlayerData {
 	public static PlayerData createNew(UUID u) {
 		PlayerData d = new PlayerData();
 		d.setUuid(u);
-		//d.setBlocks(new ArrayList<Integer>()); TODO check
 		
 		return d;
 	}

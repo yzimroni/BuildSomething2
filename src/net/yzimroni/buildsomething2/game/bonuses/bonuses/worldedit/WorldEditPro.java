@@ -51,7 +51,7 @@ public class WorldEditPro extends WorldEditBonus {
 	@Override
 	public HashMap<String, String> getCommands() {
 		HashMap<String, String> commands = new HashMap<String, String>();
-		
+
 		commands.put("smooth", "worldedit.region.smooth");
 		commands.put("deform", "worldedit.region.deform");
 		commands.put("hollow", "worldedit.region.hollow");
@@ -63,13 +63,13 @@ public class WorldEditPro extends WorldEditBonus {
 		commands.put("pyramid", "worldedit.generation.pyramid");
 		commands.put("hpyramid", "worldedit.generation.pyramid");
 		commands.put("forestgen", "worldedit.generation.forest");
-		commands.put("pumpkins", "worldedit.generation.pumpkins");		
-		commands.put("brush", "worldedit.brush.*"); //TODO check this		
-		commands.put("overlay", "worldedit.region.overlay"); 
-		commands.put("center", "worldedit.region.center"); 
-		commands.put("distr", "worldedit.analysis.distr"); 
-		commands.put("deltree", "worldedit.tool.deltree"); 
-		commands.put("snow", "worldedit.snow"); 
+		commands.put("pumpkins", "worldedit.generation.pumpkins");
+		commands.put("brush", "worldedit.brush.*"); // TODO check this
+		commands.put("overlay", "worldedit.region.overlay");
+		commands.put("center", "worldedit.region.center");
+		commands.put("distr", "worldedit.analysis.distr");
+		commands.put("deltree", "worldedit.tool.deltree");
+		commands.put("snow", "worldedit.snow");
 		return commands;
 	}
 

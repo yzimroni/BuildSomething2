@@ -208,18 +208,18 @@ public class RandomLetters extends Bonus {
 		
 		letters[0] = random.nextInt(word.length());
 		
-		boolean getIt = false; //TODO rename?
+		boolean foundAll = false;
 		for (int i = 0; i < 200; i++) {
 			int second = random.nextInt(word.length());
 			if (letters[0] == second) {
 				continue;
 			}
 			letters[1] = second;
-			getIt = true;
+			foundAll = true;
 			break;
 		}
 		
-		if (!getIt) { 
+		if (!foundAll) { 
 			if ((letters[0] == word.length() - 1)) {
 				letters[1] = letters[0] - 1;
 			} else {

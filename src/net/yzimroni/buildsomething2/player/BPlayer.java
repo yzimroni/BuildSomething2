@@ -22,7 +22,7 @@ public class BPlayer {
 	private long playTime;
 	private long lastLogin;
 	private String lastIp;
-	private int loginTimes; //TODO
+	private int loginTimes;
 	private boolean hebrewWords;
 	
 	
@@ -263,12 +263,12 @@ public class BPlayer {
 	public void addAchievement(AchievementInfo a) {
 		if (!getData().hasAchievement(a.getAchievement())) {
 			sendAchievementMessage(a);
-			//TODO
 			getData().addAchievementDirect(a);
 		}
 	}
 	
 	protected void sendAchievementMessage(AchievementInfo a) {
+		//TODO
 		getPlayer().sendMessage("Achievement get: " + a.getAchievement().getName());
 	}
 	

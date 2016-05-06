@@ -148,7 +148,7 @@ public class GameManager implements Listener {
 			}
 		} else {
 			if (builder1 < 1) {
-				//TODO 1 to 2
+				//TODO 1 to 2: what?
 				return new BuildersGame(this, 1, maxPlayers);
 			} else if (builders < 1) {
 				return new BuildersGame(this, 2, maxPlayers);
