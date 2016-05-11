@@ -644,18 +644,18 @@ public class GameManager implements Listener {
 	public int saveGame(GameInfo info) {
 		int id = -1;
 		try {
-			PreparedStatement game = plugin.getDB().getPrepareAutoKeys("INSERT INTO games (game_id,map_id,word_id,plot_id,players_count,game_type,date,know_count,plot_type,game_length) VALUES(?,?,?,?,?,?,?,?,?,?)");
+			PreparedStatement game = plugin.getDB().getPrepareAutoKeys("INSERT INTO games (game_id,map_id,word_id,plot_id,players_count,game_type,date,know_count,plot_type,game_length,openTime) VALUES(?,?,?,?,?,?,?,?,?,?,?)");
 			game.setInt(1, info.getGameId());
 			game.setInt(2, info.getMapId());
 			game.setInt(3, info.getWordId());
 			game.setString(4, info.getPlotId());
 			game.setInt(5, info.getPlayersCount());
-			//TODO check for null
 			game.setInt(6, info.getGameType() != null ? info.getGameType().getId() : -1);
 			game.setLong(7, info.getDate());
 			game.setInt(8, info.getKnowCount());
 			game.setInt(9, info.getPlotType() != null ? info.getPlotType().getId() : -1);
 			game.setLong(10, info.getGameLength());
+			game.setLong(11, info.getOpenTime());
 			game.executeUpdate();
 			
 			id = plugin.getDB().getIdFromPrepared(game);

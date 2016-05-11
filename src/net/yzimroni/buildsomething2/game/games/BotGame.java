@@ -273,7 +273,7 @@ public class BotGame extends Game {
 					if (knows.size() >= players.size()) {
 						coins += 6;
 					}
-					double perb = coins / plot.getBuilders().size(); //TODO maybe give the same amount of coins if there is only one builder?
+					double perb = coins;
 					for (UUID u : plot.getBuilders()) {
 						plugin.getPlayerManager().getEconomy().addBotCoins(u, perb);
 					}

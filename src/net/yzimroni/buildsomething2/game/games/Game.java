@@ -105,6 +105,7 @@ public abstract class Game {
 		gameInfo = new GameInfo();
 		gameInfo.setGameId(gameNumberId);
 		gameInfo.setMapId(map.getId());
+		gameInfo.setOpenTime(System.currentTimeMillis());
 		
 		languageOptions = new LanguageOptions(this);
 	}

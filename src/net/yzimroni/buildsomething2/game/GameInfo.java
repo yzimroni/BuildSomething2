@@ -4,29 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameInfo {
-	
-	/*
-	 * TODO:
-	 * add waitTime (how much time the game was in lobby and lobby countdown mode, from the init of the game until the starting)
-	 */
 
-	private int gameId = -1; //V
-	private int mapId = -1; //V
-	private int wordId = -1; //V
-	private String plotId ; //V
-	//private int gameType = -1; //V 0 = 1 builder game, 1 = two (or more) builders game, 2 = bot game
+	private int gameId = -1;
+	private int mapId = -1;
+	private int wordId = -1;
+	private String plotId;
 	private GameType gameType = null;
-	private List<PlayerInfo> players = new ArrayList<PlayerInfo>(); //V
-	private long date = -1; //V
-	private int knowCount = -1; //V
-	//private int plotType = -1; //V 0 = normal plot, 1 = bot plot, 2 = build by plot in this game (the plot_id will be the original plot, but the plot type not)
+	private List<PlayerInfo> players = new ArrayList<PlayerInfo>();
+	private long date = -1;
+	private int knowCount = -1;
 	private PlotType plotType = null;
-	private long gameLength = -1; //V
-	
+	private long gameLength = -1;
+	private long openTime = -1;
+
 	public GameInfo() {
-		
+
 	}
-	
+
 	public int getGameId() {
 		return gameId;
 	}
@@ -70,7 +64,7 @@ public class GameInfo {
 	public List<PlayerInfo> getPlayers() {
 		return players;
 	}
-	
+
 	public void addPlayer(PlayerInfo player) {
 		if (!players.contains(player)) {
 			players.add(player);
@@ -80,7 +74,7 @@ public class GameInfo {
 	public void setPlayers(List<PlayerInfo> players) {
 		this.players = players;
 	}
-	
+
 	public int getPlayersCount() {
 		return this.players.size();
 	}
@@ -117,6 +111,14 @@ public class GameInfo {
 		this.gameLength = gameLength;
 	}
 
+	public long getOpenTime() {
+		return openTime;
+	}
+
+	public void setOpenTime(long openTime) {
+		this.openTime = openTime;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -130,6 +132,7 @@ public class GameInfo {
 		result = prime * result + ((players == null) ? 0 : players.hashCode());
 		result = prime * result + ((plotId == null) ? 0 : plotId.hashCode());
 		result = prime * result + ((plotType == null) ? 0 : plotType.hashCode());
+		result = prime * result + (int) (openTime ^ (openTime >>> 32));
 		result = prime * result + wordId;
 		return result;
 	}
@@ -181,6 +184,9 @@ public class GameInfo {
 		if (plotType != other.plotType) {
 			return false;
 		}
+		if (openTime != other.openTime) {
+			return false;
+		}
 		if (wordId != other.wordId) {
 			return false;
 		}
@@ -190,35 +196,36 @@ public class GameInfo {
 	@Override
 	public String toString() {
 		return "GameInfo [gameId=" + gameId + ", mapId=" + mapId + ", wordId=" + wordId + ", plotId=" + plotId + ", gameType=" + gameType
-			+ ", players=" + players + ", date=" + date + ", knowCount=" + knowCount + ", plotType=" + plotType + ", gameLength=" + gameLength + "]";
+			+ ", players=" + players + ", date=" + date + ", knowCount=" + knowCount + ", plotType=" + plotType + ", gameLength=" + gameLength
+			+ ", openTime=" + openTime + "]";
 	}
 
 	public enum PlotType {
 		NORMAL_PLOT(0), BOT_PLOT(1), PLOT_BUILT_BY_BOT(2);
 		private int id;
-		
+
 		private PlotType(int i) {
 			this.id = i;
 		}
-		
+
 		public int getId() {
 			return this.id;
 		}
 	}
-		
+
 	public enum GameType {
 		SINGLE_BUILDER_GAME(0), MULTI_BUILDERS_GAME(1), BOT_GAME(2);
-		
+
 		private int id;
-		
+
 		private GameType(int i) {
 			this.id = i;
 		}
-		
+
 		public int getId() {
 			return this.id;
 		}
 
 	}
-	
+
 }
