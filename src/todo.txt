@@ -1,0 +1,24 @@
+Coin multiplaier option
+Achievements
+Multi builders get the same amount of money as if they were the only one
+Move LangOption to game (?), finish LangOption
+Plot change (PlotSquared?)
+Move plot to bot
+Game build report system (copy the plot to another plotworld + send the game info to the db with the plot id)
+Make WorldGuard handle the block break/place (and not the plugin)
+Game chat limitation will enable only when the game running
+Less games at a time
+Auto game start system
+Add more bonuses to normal players
+Header & footer
+Add option to reset the plot mid-game (when changing word?)
+Stats for bot game etc
+
+
+
+
+Bug report system + command
+Tutorial
+Events
+Rename "Know the word" (Maybe 'Guess'?)
+Booster
