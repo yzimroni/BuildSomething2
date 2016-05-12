@@ -5,10 +5,6 @@ import java.util.UUID;
 
 public class BotPlot {
 
-	/*
-	 * TO DO showBuilders (show the builders names?)
-	 */
-
 	private int id;
 	private int wordId;
 	private String plotId;

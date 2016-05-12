@@ -51,6 +51,7 @@ import com.worldcretornica.plotme_core.PlotMeCoreManager;
 public class BotGame extends Game {
 	
 	private BotPlot plot;
+	
 	private List<BlockLocation> blocks;
 	private int block_index = 0;
 	private int l_x = 0, l_y = 0, l_z = 0;

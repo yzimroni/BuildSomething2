@@ -49,34 +49,39 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 public abstract class Game {
 	
 	public static final int MIN_PLAYERS_START = 2;
-	public static final int LOOBY_COUNT_DOWN_TIME = 10/*30*/;
+	public static final int LOOBY_COUNT_DOWN_TIME = 10/* 30 */;
 	public static final int GAME_TIME = 300;
-	private static List<String> symbols;
-	
+
 	protected BuildSomethingPlugin plugin;
+	protected GameManager manager;
+
 	private UUID gameId;
 	private int gameNumberId;
-	protected GameManager manager;
-	protected int maxPlayers;
-	protected Word word = null;
-	protected List<BPlayer> players = new ArrayList<BPlayer>();
-	protected List<UUID> knows = new ArrayList<UUID>(); 
+
+	protected GameInfo gameInfo;
+
 	protected Gamemode mode = Gamemode.LOBBY;
-	protected boolean forceStart = false;
-	protected IntWarpper lobby_count_down;
-	protected IntWarpper game_count_down;
 	protected Map map;
+	protected int maxPlayers;
+	protected List<BPlayer> players = new ArrayList<BPlayer>();
+	protected Word word = null;
+	protected List<UUID> knows = new ArrayList<UUID>();
+
+	protected boolean forceStart = false;
+	protected LanguageOptions languageOptions;
+
 	protected SimpleScoreboard scoreboard;
 	protected HashMap<String, String> metadata = new HashMap<String, String>();
 	protected HashMap<UUID, RewardInfo> rewards = new HashMap<UUID, RewardInfo>();
 	protected HashMap<UUID, ChatInfo> chats = new HashMap<UUID, ChatInfo>();
-	protected long startTime;
-	protected GameInfo gameInfo;
-	protected LanguageOptions languageOptions;
-	
+
 	protected IntWarpper task_id_lobby = new IntWarpper();
 	protected IntWarpper task_id_game = new IntWarpper();
-	
+
+	protected IntWarpper lobby_count_down;
+	protected IntWarpper game_count_down;
+
+	private static List<String> symbols;	
 	
 	public Game(GameManager gm, int maxPlayers) {
 		gameId = UUID.randomUUID();
@@ -100,6 +105,7 @@ public abstract class Game {
 		
 		map = manager.randomMap();
 		map.setUse(true);
+		
 		scoreboard = plugin.getScoreboardManager().createGameScoreboard(this);
 		
 		gameInfo = new GameInfo();
@@ -274,8 +280,7 @@ public abstract class Game {
 	
 	protected void start() {
 		setMode(Gamemode.RUNNING);
-		startTime = System.currentTimeMillis();
-		gameInfo.setDate(startTime);
+		gameInfo.setDate(System.currentTimeMillis());
 		rewards.clear();
 		setScoreboard(plugin.getScoreboardManager().createGameScoreboard(this));
 		
@@ -477,7 +482,7 @@ public abstract class Game {
 		if (word != null) {
 			gameInfo.setWordId(word.getId());
 		}
-		gameInfo.setGameLength(System.currentTimeMillis() - startTime);
+		gameInfo.setGameLength(System.currentTimeMillis() - gameInfo.getDate());
 		gameInfo.setKnowCount(knows.size());
 		
 		System.out.println(gameInfo);
@@ -627,7 +632,7 @@ public abstract class Game {
 	
 	protected void knowTheWord(Player p) {
 		BPlayer bp = plugin.getPlayerManager().getPlayer(p.getUniqueId());
-		getRewardInfo(p).setTimeTook(System.currentTimeMillis() - startTime);
+		getRewardInfo(p).setTimeTook(System.currentTimeMillis() - gameInfo.getDate());
 		manager.getEffectsManager().getViewById(0).getEffect(bp).run(p.getEyeLocation(), p);
 		knows.add(p.getUniqueId());
 		message(p.getName() + " know the word!");

@@ -51,8 +51,9 @@ import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldguard.domains.DefaultDomain;
 public class BuildersGame extends Game {
 	
-	private Builders builders;
 	private int buildersCount;
+	private Builders builders;
+	
 	private PlotInfo plotInfo;
 	
 	public BuildersGame(GameManager gm, int buildersCount, int maxPlayers) {
