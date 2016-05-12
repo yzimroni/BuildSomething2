@@ -214,17 +214,24 @@ public class GameInfo {
 	}
 
 	public enum GameType {
-		SINGLE_BUILDER_GAME(0), MULTI_BUILDERS_GAME(1), BOT_GAME(2);
+		SINGLE_BUILDER_GAME(0, "Single Builder"), MULTI_BUILDERS_GAME(1, "Multi builders"), BOT_GAME(2, "Bot");
 
 		private int id;
+		private String displayName;
 
-		private GameType(int i) {
+		private GameType(int i, String displayName) {
 			this.id = i;
+			this.displayName = displayName;
 		}
 
 		public int getId() {
 			return this.id;
 		}
+		
+		public String getDisplayName() {
+			return displayName;
+		}
+		
 		
 		public static GameType getById(int id) {
 			for (GameType type : values()) { //TODO make values() use a static array
@@ -234,6 +241,7 @@ public class GameInfo {
 			}
 			return null;
 		}
+
 
 	}
 

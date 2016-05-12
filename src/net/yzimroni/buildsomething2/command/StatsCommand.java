@@ -5,6 +5,7 @@ import net.yzimroni.buildsomething2.player.PlayerData;
 import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
 import net.yzimroni.buildsomething2.utils.Utils;
 
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,12 +41,12 @@ public class StatsCommand implements CommandExecutor {
 				sender.sendMessage("Coins: " + plugin.getPlayerManager().getEconomy().getBalance(op.getUniqueId()));
 				sender.sendMessage("Blocks: " + data.getBlocks().size());
 				for (GameTypeStats type : data.getStats().values()) {
-					sender.sendMessage("	" + type.getGameType().name() + ":");
-					sender.sendMessage("	" + "Total games: " + type.getTotalGames());
-					sender.sendMessage("	" + "Builder: " + type.getBuilder());
-					sender.sendMessage("	" + "Normal: " + type.getNormal());
-					sender.sendMessage("	" + "Know the word: " + type.getKnow());
-					sender.sendMessage("	" + "Know first: " + type.getKnowFirst());
+					sender.sendMessage(ChatColor.GREEN + type.getGameType().getDisplayName() + " Game:");
+					sender.sendMessage(ChatColor.BLUE + "    " + "Total games: " + type.getTotalGames());
+					sender.sendMessage(ChatColor.BLUE + "    " + "Builder: " + type.getBuilder());
+					sender.sendMessage(ChatColor.BLUE + "    " + "Normal: " + type.getNormal());
+					sender.sendMessage(ChatColor.BLUE + "    " + "Know the word: " + type.getKnow());
+					sender.sendMessage(ChatColor.BLUE + "    " + "Know first: " + type.getKnowFirst());
 					
 				}
 			}
