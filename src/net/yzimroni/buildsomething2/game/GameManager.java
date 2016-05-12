@@ -14,6 +14,7 @@ import net.yzimroni.buildsomething2.game.effects.EffectsManager;
 import net.yzimroni.buildsomething2.game.games.BotGame;
 import net.yzimroni.buildsomething2.game.games.BuildersGame;
 import net.yzimroni.buildsomething2.game.games.Game;
+import net.yzimroni.buildsomething2.game.plots.PlotInfo;
 import net.yzimroni.buildsomething2.game.plots.PlotManager;
 import net.yzimroni.buildsomething2.player.BPlayer;
 import net.yzimroni.buildsomething2.utils.IntWarpper;
@@ -689,6 +690,26 @@ public class GameManager implements Listener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return id;
+	}
+	
+	public int sendReport(Player reporter, String reason, Game g, PlotInfo plot) {
+		int id = -1;
+		
+		try {
+			PreparedStatement report = plugin.getDB().getPrepareAutoKeys("INSERT INTO reports (reporterUUID,gameId,reason,plotId,date) VALUES(?,?,?,?,?)");
+			report.setString(1, reporter.getUniqueId().toString());
+			report.setInt(2, g.getNumberId());
+			report.setString(3, reason);
+			report.setString(4, plot.getPlotId());
+			report.setLong(5, System.currentTimeMillis());
+			report.executeUpdate();
+			
+			id = plugin.getDB().getIdFromPrepared(report);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return id;
 	}
 	

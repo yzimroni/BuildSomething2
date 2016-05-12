@@ -371,7 +371,12 @@ public class BuildersGame extends Game {
 		if (word != null && !builders.isEmpty()) {
 			WorldEditClipboard cb = createWorldEditClipboard();
 			PlotInfo reportInfo = manager.getPlotManager().createGameBuildPlot(this, builders, cb, PlotManager.CPlotType.REPORT);
-			//TODO send the report data to the db
+			int id = manager.sendReport(reporter, reason, this, reportInfo);
+			if (id != -1) {
+				reporter.sendMessage("You have reported this build, your report id is " + id);
+			} else {
+				reporter.sendMessage("Error while sending the report, contact a staff member");
+			}
 		}
 	}
 	
@@ -438,6 +443,7 @@ public class BuildersGame extends Game {
 	public void changeWord() {
 		if (mode == Gamemode.RUNNING) {
 			word = manager.randomWord();
+			clearMapBuildArea();
 		}
 	}
 	

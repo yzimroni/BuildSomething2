@@ -572,35 +572,39 @@ public abstract class Game {
 	public void onPlayerChat(final AsyncPlayerChatEvent e) {
 		//TODO check if the game is running
 		if (check(e.getPlayer())) {
-			ChatInfo ci = chats.get(e.getPlayer().getUniqueId());
-			if (ci != null) {
-				if ((System.currentTimeMillis() - ci.firstMessage) < 10 * 1000) {
-					if ((ci.messageCount + 1) > 3) {
-						e.setCancelled(true);
-						e.getPlayer().sendMessage(ChatColor.RED + "Please wait");
-						return;
+			if (mode == Gamemode.RUNNING) {
+
+				ChatInfo ci = chats.get(e.getPlayer().getUniqueId());
+				if (ci != null) {
+					if ((System.currentTimeMillis() - ci.firstMessage) < 10 * 1000) {
+						if ((ci.messageCount + 1) > 3) {
+							e.setCancelled(true);
+							e.getPlayer().sendMessage(ChatColor.RED + "Please wait");
+							return;
+						} else {
+							ci.messageCount++;
+						}
 					} else {
-						ci.messageCount++;
+						ci.firstMessage = System.currentTimeMillis();
+						ci.messageCount = 1;
 					}
+
 				} else {
+					ci = new ChatInfo();
 					ci.firstMessage = System.currentTimeMillis();
 					ci.messageCount = 1;
+					chats.put(e.getPlayer().getUniqueId(), ci);
 				}
-						
-			} else {
-				ci = new ChatInfo();
-				ci.firstMessage = System.currentTimeMillis();
-				ci.messageCount = 1;
-				chats.put(e.getPlayer().getUniqueId(), ci);
+				ChatPlayerType sender = getChatPlayerType(e.getPlayer());
+				if (isSame(e.getMessage()) && sender == ChatPlayerType.KNOW_BUILDER) {
+					e.setCancelled(true);
+					return;
+				}
 			}
-			ChatPlayerType sender = getChatPlayerType(e.getPlayer());
-			if (isSame(e.getMessage()) && sender == ChatPlayerType.KNOW_BUILDER) {
-				e.setCancelled(true);
-				return;
-			}
-			
+
 			if (word != null && word.isSame(e.getMessage())) {
 				e.setCancelled(true);
+				ChatPlayerType sender = getChatPlayerType(e.getPlayer());
 				if (sender == ChatPlayerType.DONT_KNOW) {
 					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 						
@@ -616,6 +620,7 @@ public abstract class Game {
 			
 			e.getRecipients().clear();
 			for (Player p : getPlayersBukkit()) {
+				ChatPlayerType sender = getChatPlayerType(e.getPlayer());
 				ChatPlayerType reciver = getChatPlayerType(p);
 				if (sender.canSendTo(reciver)) {
 					e.getRecipients().add(p);

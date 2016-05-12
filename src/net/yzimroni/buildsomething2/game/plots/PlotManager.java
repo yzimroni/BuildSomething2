@@ -51,16 +51,18 @@ public class PlotManager {
 				}
 			}
 			
-			com.worldcretornica.plotme_core.api.Vector lm = plot.getPlotTopLoc();
-			Location l = new Location(world, lm.getX(), lm.getY(), lm.getZ());
-			int step = 0;
-			for (Player p : builders.getPlayers()) {
-				Location npcl = new Location(l.getWorld(), l.getX(), l.getY(), l.getZ());
-				npcl.subtract(2 * step, 0, 0);
-				NPC c = npcmanager.createPlotBuildNPC(npcl, p, g.getWord());
-				l.getChunk().load();
-				info.addBuilder(p.getUniqueId(), c.getId());
-				step++;
+			if (type == CPlotType.NORMAL) {
+				com.worldcretornica.plotme_core.api.Vector lm = plot.getPlotTopLoc();
+				Location l = new Location(world, lm.getX(), lm.getY(), lm.getZ());
+				int step = 0;
+				for (Player p : builders.getPlayers()) {
+					Location npcl = new Location(l.getWorld(), l.getX(), l.getY(), l.getZ());
+					npcl.subtract(2 * step, 0, 0);
+					NPC c = npcmanager.createPlotBuildNPC(npcl, p, g.getWord());
+					l.getChunk().load();
+					info.addBuilder(p.getUniqueId(), c.getId());
+					step++;
+				}
 			}
 			pastePlot(plot, g.getMap().getYPaste(), clipboard);
 			return info;
