@@ -75,7 +75,7 @@ public class GameCommand implements CommandExecutor {
 									BuildersGame bs = (BuildersGame) g;
 									builders = (!bs.getBuilders().isEmpty() ? " | " + bs.getBuilders() : "");
 								}
-								sender.sendMessage("" + index + " | " + g.getGameType() + " | " + g.getMode() + " | " + g.getPlayers().size() + "/" + g.getMaxPlayers() + builders);
+								sender.sendMessage("" + index + " | " + g.getGameType() + " | " + g.getMap().getName()  + " | " + g.getMode() + " | " + g.getPlayers().size() + "/" + g.getMaxPlayers() + builders);
 							}
 						}
 					} else if (args[0].equalsIgnoreCase("start")) {

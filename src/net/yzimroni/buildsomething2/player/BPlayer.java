@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.player.achievement.AchievementInfo;
+import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -94,27 +95,23 @@ public class BPlayer {
 	public void save(BuildSomethingPlugin p) {
 		long cpt = (System.currentTimeMillis() / 1000) - (lastLogin / 1000);
 		playTime += cpt;
-		PreparedStatement ps = p.getDB().getPrepare("UPDATE players SET Name=?,total=?,builder=?,normal=?,know=?,knowfirst=?,hotbar_items=?," +
-				"playTime=?,lastLogin=?,lastIp=?,loginTimes=?,allknow=?,hebrewWords=? WHERE UUID='" + uuid.toString() + "'");
+		PreparedStatement ps = p.getDB().getPrepare("UPDATE players SET Name=?,hotbar_items=?," +
+				"playTime=?,lastLogin=?,lastIp=?,loginTimes=?,hebrewWords=? WHERE UUID='" + uuid.toString() + "'");
 		try {
 			ps.setString(1, getPlayer().getName());
-			ps.setInt(2, data.getTotalGames());
-			ps.setInt(3, data.getBuilder());
-			ps.setInt(4, data.getNormalPlayer());
-			ps.setInt(5, data.getKnow());
-			ps.setInt(6, data.getKnowFirst());
 			if (data.getHotbarItems() == null || data.getHotbarItems().isEmpty()) {
-				ps.setNull(7, Types.VARCHAR);
+				ps.setNull(2, Types.VARCHAR);
 			} else {
-				ps.setString(7, data.getHotbarItems());
+				ps.setString(2, data.getHotbarItems());
 			}
-			ps.setLong(8, playTime);
-			ps.setLong(9, lastLogin);
-			ps.setString(10, lastIp);
-			ps.setInt(11, loginTimes);
-			ps.setInt(12, data.getAllKnow());
-			ps.setBoolean(13, hebrewWords);
+			ps.setLong(3, playTime);
+			ps.setLong(4, lastLogin);
+			ps.setString(5, lastIp);
+			ps.setInt(6, loginTimes);
+			ps.setBoolean(7, hebrewWords);
 			ps.execute();
+			
+			
 			lastLogin = System.currentTimeMillis();
 			if (!data.getNewBlocks().isEmpty()) {
 				String s = "INSERT INTO playerblocks (UUID,block_id) ";
@@ -236,6 +233,37 @@ public class BPlayer {
 
 					achievementSQL.executeUpdate();
 
+				}
+			}
+			
+			List<GameTypeStats> updated = data.getUpdatedStats();
+			if (!updated.isEmpty()) {
+				for (GameTypeStats stat : updated) {
+					PreparedStatement psb = p.getDB().getPrepare("INSERT INTO playerstats (UUID,gameType,totalGames,builder,normal,know,knowFirst,allKnow) VALUES (?,?,?,?,?,?,?,?) " +
+					"ON DUPLICATE KEY UPDATE totalGames=?,builder=?,normal=?,know=?,knowFirst=?,allKnow=?");
+					psb.setString(1, uuid.toString());
+					psb.setInt(2, stat.getGameType().getId());
+					int index = 3;
+					for (int i = 0; i < 2; i++) {
+						psb.setInt(index, stat.getTotalGames());
+						index++;
+						
+						psb.setInt(index, stat.getBuilder());
+						index++;
+						
+						psb.setInt(index, stat.getNormal());
+						index++;
+						
+						psb.setInt(index, stat.getKnow());
+						index++;
+						
+						psb.setInt(index, stat.getKnowFirst());
+						index++;
+						
+						psb.setInt(index, stat.getAllKnow());
+						index++;
+					}
+					psb.executeUpdate();
 				}
 			}
 			

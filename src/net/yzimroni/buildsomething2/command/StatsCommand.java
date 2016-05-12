@@ -2,6 +2,7 @@ package net.yzimroni.buildsomething2.command;
 
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.player.PlayerData;
+import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
 import net.yzimroni.buildsomething2.utils.Utils;
 
 import org.bukkit.OfflinePlayer;
@@ -38,11 +39,15 @@ public class StatsCommand implements CommandExecutor {
 				sender.sendMessage(op.getName() + "'s Stats:");
 				sender.sendMessage("Coins: " + plugin.getPlayerManager().getEconomy().getBalance(op.getUniqueId()));
 				sender.sendMessage("Blocks: " + data.getBlocks().size());
-				sender.sendMessage("Total games: " + data.getTotalGames());
-				sender.sendMessage("Builder: " + data.getBuilder());
-				sender.sendMessage("Normal player: " + data.getNormalPlayer());
-				sender.sendMessage("Know the word: " + data.getKnow());
-				sender.sendMessage("Know the word first: " + data.getKnowFirst());
+				for (GameTypeStats type : data.getStats().values()) {
+					sender.sendMessage("	" + type.getGameType().name() + ":");
+					sender.sendMessage("	" + "Total games: " + type.getTotalGames());
+					sender.sendMessage("	" + "Builder: " + type.getBuilder());
+					sender.sendMessage("	" + "Normal: " + type.getNormal());
+					sender.sendMessage("	" + "Know the word: " + type.getKnow());
+					sender.sendMessage("	" + "Know first: " + type.getKnowFirst());
+					
+				}
 			}
 		}
 		return false;

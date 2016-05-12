@@ -225,6 +225,15 @@ public class GameInfo {
 		public int getId() {
 			return this.id;
 		}
+		
+		public static GameType getById(int id) {
+			for (GameType type : values()) { //TODO make values() use a static array
+				if (type.getId() == id) {
+					return type;
+				}
+			}
+			return null;
+		}
 
 	}
 

@@ -19,10 +19,11 @@ public class TopPlayers {
 	public void update() {
 		tops.clear();
 		try {
-			ResultSet rs = plugin.getDB().get("SELECT * FROM players ORDER BY ((total*2) + (know * 100)) DESC LIMIT 3");
+			//TODO
+			/*ResultSet rs = plugin.getDB().get("SELECT * FROM players ORDER BY ((total*2) + (know * 100)) DESC LIMIT 3");
 			while (rs.next()) {
 				tops.add(UUID.fromString(rs.getString("UUID")));
-			}
+			}*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -7,18 +7,17 @@ import java.util.List;
 import java.util.UUID;
 
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.game.GameInfo.GameType;
 import net.yzimroni.buildsomething2.player.achievement.AchievementInfo;
 import net.yzimroni.buildsomething2.player.achievement.BAchievement;
+import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
+import net.yzimroni.buildsomething2.player.stats.GlobalStats;
 
 public class PlayerData {
-	private UUID uuid;
-	private int totalgames;
-	private int builder;
-	private int normalplayer;
-	private int knowtheword;
-	private int knowthewordfirst;
-	private int allKnow;
+	
 	private BuildSomethingPlugin plugin;
+	private UUID uuid;
+	
 	private List<Integer> blocks = new ArrayList<Integer>();
 	private List<Integer> new_blocks = new ArrayList<Integer>();
 	private List<Integer> effects = new ArrayList<Integer>();
@@ -27,8 +26,12 @@ public class PlayerData {
 	protected HashMap<Integer, Integer> views_effects = new HashMap<Integer, Integer>();
 	private List<Integer> views = new ArrayList<Integer>();
 	private List<Integer> new_views = new ArrayList<Integer>();
-	private String hotbar_items;
+	
 	private List<AchievementInfo> achievements = new ArrayList<AchievementInfo>();
+	private HashMap<GameType, GameTypeStats> stats = new HashMap<GameType, GameTypeStats>();
+	private GlobalStats globalStats;
+	
+	private String hotbar_items;
 	
 	public static PlayerData load(BuildSomethingPlugin p, UUID u) {
 		try {
@@ -46,13 +49,7 @@ public class PlayerData {
 		d.setUuid(u);
 		try {
 			d.setPlugin(p);
-			d.setTotalGames(rs.getInt("total"));
-			d.setBuilder(rs.getInt("builder"));
-			d.setNormalPlayer(rs.getInt("normal"));
-			d.setKnow(rs.getInt("know"));
-			d.setKnowFirst(rs.getInt("knowfirst"));
-			d.setHotbarItems(rs.getString("hotbar_items"));
-			d.setAllKnow(rs.getInt("allknow"));
+			d.loadStats();
 			d.loadBlocks();
 			d.loadBonuses();
 			d.loadEffects();
@@ -62,6 +59,26 @@ public class PlayerData {
 			return null;
 		}
 		return d;
+	}
+	
+	private void loadStats() {
+		try {
+			ResultSet rs = getPlugin().getDB().get("SELECT * FROM playerstats WHERE UUID='" + uuid.toString() + "'");
+			while (rs.next()) {
+				GameType type = GameType.getById(rs.getInt("gameType"));
+				GameTypeStats gamestats = new GameTypeStats(uuid, type);
+				gamestats.load(rs);
+				stats.put(type, gamestats);
+				
+			}
+			initGlobalStats();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void initGlobalStats() {
+		setGlobalStats(new GlobalStats(this));
 	}
 	
 	private void loadBlocks() {
@@ -144,6 +161,7 @@ public class PlayerData {
 	public static PlayerData createNew(UUID u) {
 		PlayerData d = new PlayerData();
 		d.setUuid(u);
+		d.initGlobalStats();
 		
 		return d;
 	}
@@ -152,6 +170,35 @@ public class PlayerData {
 		
 	}
 	
+	public GameTypeStats getGameTypeStats(GameType type) {
+		if (type == null) {
+			return null;
+		}
+		if (stats.containsKey(type)) {
+			return stats.get(type);
+		} else {
+			GameTypeStats gamestats = new GameTypeStats(uuid, type);
+			gamestats.createEmpty();
+			stats.put(type, gamestats);
+			return gamestats;
+		}
+	}
+	
+	public HashMap<GameType, GameTypeStats> getStats() {
+		return stats;
+	}
+	
+	public List<GameTypeStats> getUpdatedStats() {
+		//TODO check that it is add all the updated stats
+		List<GameTypeStats> updated = new ArrayList<GameTypeStats>();
+		for (GameTypeStats stat : stats.values()) {
+			if (stat.isUpdated()) {
+				updated.add(stat);
+			}
+		}
+		return updated;
+	}
+
 	public int getBonus(int id) {
 		if (bonuses.containsKey(id)) {
 			return bonuses.get(id);
@@ -260,66 +307,6 @@ public class PlayerData {
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
 	}
-	/**
-	 * @return the totalgames
-	 */
-	public int getTotalGames() {
-		return totalgames;
-	}
-	/**
-	 * @param totalgames the totalgames to set
-	 */
-	public void setTotalGames(int totalgames) {
-		this.totalgames = totalgames;
-	}
-	/**
-	 * @return the builder
-	 */
-	public int getBuilder() {
-		return builder;
-	}
-	/**
-	 * @param builder the builder to set
-	 */
-	public void setBuilder(int builder) {
-		this.builder = builder;
-	}
-	/**
-	 * @return the normalplayer
-	 */
-	public int getNormalPlayer() {
-		return normalplayer;
-	}
-	/**
-	 * @param normalplayer the normalplayer to set
-	 */
-	public void setNormalPlayer(int normalplayer) {
-		this.normalplayer = normalplayer;
-	}
-	/**
-	 * @return the knowtheword
-	 */
-	public int getKnow() {
-		return knowtheword;
-	}
-	/**
-	 * @param knowtheword the knowtheword to set
-	 */
-	public void setKnow(int knowtheword) {
-		this.knowtheword = knowtheword;
-	}
-	/**
-	 * @return the knowthewordfirst
-	 */
-	public int getKnowFirst() {
-		return knowthewordfirst;
-	}
-	/**
-	 * @param knowthewordfirst the knowthewordfirst to set
-	 */
-	public void setKnowFirst(int knowthewordfirst) {
-		this.knowthewordfirst = knowthewordfirst;
-	}
 
 	public List<Integer> getBlocks() {
 		return blocks;
@@ -366,20 +353,6 @@ public class PlayerData {
 	public void setHotbarItems(String hotbar_items) {
 		this.hotbar_items = hotbar_items;
 	}
-
-	/**
-	 * @return the allKnow
-	 */
-	public int getAllKnow() {
-		return allKnow;
-	}
-
-	/**
-	 * @param allKnow the allKnow to set
-	 */
-	public void setAllKnow(int allKnow) {
-		this.allKnow = allKnow;
-	}
 	
 	public List<AchievementInfo> getAchievements() {
 		return achievements;
@@ -388,5 +361,14 @@ public class PlayerData {
 	public void setAchievements(List<AchievementInfo> achievements) {
 		this.achievements = achievements;
 	}
+
+	public GlobalStats getGlobalStats() {
+		return globalStats;
+	}
+
+	public void setGlobalStats(GlobalStats globalStats) {
+		this.globalStats = globalStats;
+	}
+
 	
 }

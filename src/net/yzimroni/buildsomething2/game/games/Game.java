@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.GameInfo;
+import net.yzimroni.buildsomething2.game.GameInfo.GameType;
 import net.yzimroni.buildsomething2.game.GameManager;
 import net.yzimroni.buildsomething2.game.Gamemode;
 import net.yzimroni.buildsomething2.game.LanguageOptions;
@@ -19,6 +20,7 @@ import net.yzimroni.buildsomething2.game.Word;
 import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
 import net.yzimroni.buildsomething2.player.BPlayer;
 import net.yzimroni.buildsomething2.player.economy.RewardInfo;
+import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
 import net.yzimroni.buildsomething2.scoreboard.SimpleScoreboard;
 import net.yzimroni.buildsomething2.utils.IntWarpper;
 import net.yzimroni.buildsomething2.utils.Utils;
@@ -60,7 +62,7 @@ public abstract class Game {
 
 	private UUID gameId;
 	private int gameNumberId;
-
+	
 	protected GameInfo gameInfo;
 
 	protected Gamemode mode = Gamemode.LOBBY;
@@ -512,7 +514,7 @@ public abstract class Game {
 	}
 	
 	@SuppressWarnings("deprecation")
-	protected void clearMapWorldEdit() {
+	protected void clearMapBuildArea() {
 		try {
 			World world = map.getBuilder().getWorld();
 			EditSession es = new EditSession(BukkitUtil.getLocalWorld(world), Integer.MAX_VALUE);
@@ -701,8 +703,20 @@ public abstract class Game {
 
 	}
 	
+	public GameTypeStats getStats(Player p) {
+		return getStats(plugin.getPlayerManager().getPlayer(p));
+	}
+	
+	public GameTypeStats getStats(BPlayer p) {
+		return p.getData().getGameTypeStats(getType());
+	}
+	
 	public boolean isJoinable() {
 		return mode == Gamemode.LOBBY || mode == Gamemode.LOBBY_COUNTDOWN;
+	}
+	
+	public GameType getType() {
+		return gameInfo.getGameType();
 	}
 	
 	/**

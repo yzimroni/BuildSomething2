@@ -59,6 +59,7 @@ public class BotGame extends Game {
 
 	public BotGame(GameManager gm, int maxPlayers) {
 		super(gm, maxPlayers);
+		gameInfo.setGameType(GameType.BOT_GAME);
 	}
 	
 	@Override
@@ -85,9 +86,7 @@ public class BotGame extends Game {
 		}
 		
 		super.start();
-		
-		gameInfo.setGameType(GameType.BOT_GAME);
-		
+				
 		initBlocks();
 		
 		if (plot.isShowBuilders()) {
@@ -241,12 +240,10 @@ public class BotGame extends Game {
 	
 	@Override
 	protected void knowTheWord(Player p) {
-		//TODO counter for know the word for bot game
-		BPlayer bp = plugin.getPlayerManager().getPlayer(p.getUniqueId());
-		bp.getData().setKnow(bp.getData().getKnow() + 1);
+		getStats(p).addKnow();
 		if (knows.size() == 0) {
 			rewardCoins(p, 10, "Know the word first");
-			bp.getData().setKnowFirst(bp.getData().getKnowFirst() + 1);
+			getStats(p).addKnowFirst();
 		} else {
 			rewardCoins(p, 7, "Know the word");
 		}
@@ -299,7 +296,7 @@ public class BotGame extends Game {
 			gameInfo.addPlayer(new PlayerInfo(p.getUniqueId(), 2, -1, knowTime));
 		}
 		
-		clearMapWorldEdit();
+		clearMapBuildArea();
 		
 		super.stop(force, nodelay);
 	}
@@ -308,10 +305,7 @@ public class BotGame extends Game {
 	protected void afterEnd(boolean stat) {
 		for (Player p : getPlayersBukkit()) {
 			if (stat) {
-				BPlayer bp = plugin.getPlayerManager().getPlayer(p.getUniqueId());
-				
-				//TODO make normal games and bot games counter also
-				bp.getData().setTotalGames(bp.getData().getTotalGames() + 1);
+				getStats(p).addTotalGame();
 			}
 		}
 		super.afterEnd(stat);

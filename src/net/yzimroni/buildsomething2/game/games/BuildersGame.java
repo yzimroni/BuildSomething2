@@ -20,6 +20,7 @@ import net.yzimroni.buildsomething2.game.plots.PlotInfo;
 import net.yzimroni.buildsomething2.game.plots.PlotManager;
 import net.yzimroni.buildsomething2.player.BPlayer;
 import net.yzimroni.buildsomething2.player.economy.RewardInfo;
+import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
 import net.yzimroni.buildsomething2.utils.JsonBuilder;
 import net.yzimroni.buildsomething2.utils.JsonBuilder.ClickAction;
 import net.yzimroni.buildsomething2.utils.Utils;
@@ -61,6 +62,7 @@ public class BuildersGame extends Game {
 		
 		builders = new Builders(plugin);
 		this.buildersCount = buildersCount;
+		gameInfo.setGameType(buildersCount == 1 ? GameType.SINGLE_BUILDER_GAME : GameType.MULTI_BUILDERS_GAME);
 		
 	}
 	
@@ -74,6 +76,7 @@ public class BuildersGame extends Game {
 		if (builders.isEmpty()) {
 			manager.randomBuilders(this);
 		}
+		gameInfo.setGameType(builders.size() == 1 ? GameType.SINGLE_BUILDER_GAME : GameType.MULTI_BUILDERS_GAME);
 		if (builders.size() == 1) {
 			message(builders + " is the builder!");
 		} else {
@@ -262,7 +265,7 @@ public class BuildersGame extends Game {
 		if (!builders.isEmpty() && knows.size() > 0 && knows.size() >= (players.size() - builders.size())) {
 			for (BPlayer b : builders.getBPlayers()) {
 				rewardCoins(b.getPlayer(), 7, "All the players know the word");
-				b.getData().setAllKnow(b.getData().getAllKnow() + 1);
+				getStats(b).addAllKnow();
 			}
 		}
 		
@@ -272,7 +275,7 @@ public class BuildersGame extends Game {
 		if (word != null) { //TODO check if this is working
 			createBuildPlot();
 		}
-		clearMapWorldEdit();
+		clearMapBuildArea();
 		
 		gameInfo.setPlotType(PlotType.NORMAL_PLOT);
 		
@@ -342,15 +345,16 @@ public class BuildersGame extends Game {
 	protected void afterEnd(boolean stat) {
 		for (Player p : getPlayersBukkit()) {
 			if (stat) {
-				BPlayer bp = plugin.getPlayerManager().getPlayer(p.getUniqueId());
 				
 				if (isBuilder(p)) {
-					bp.getData().setBuilder(bp.getData().getBuilder() + 1);
+					GameTypeStats stats = getStats(p);
+					stats.addBuilder();
+					stats.addTotalGame();
 				} else {
-					bp.getData().setNormalPlayer(bp.getData().getNormalPlayer() + 1);
+					GameTypeStats stats = getStats(p);
+					stats.addNormal();
+					stats.addTotalGame();
 				}
-				
-				bp.getData().setTotalGames(bp.getData().getTotalGames() + 1);
 			}
 		}
 		super.afterEnd(stat);
@@ -475,11 +479,10 @@ public class BuildersGame extends Game {
 	
 	@Override
 	protected void knowTheWord(Player p) {
-		BPlayer bp = plugin.getPlayerManager().getPlayer(p.getUniqueId());
-		bp.getData().setKnow(bp.getData().getKnow() + 1);
+		getStats(p).addKnow();
 		if (knows.size() == 0) {
 			rewardCoins(p, 10, "Know the word first");
-			bp.getData().setKnowFirst(bp.getData().getKnowFirst() + 1);
+			getStats(p).addKnowFirst();
 		} else {
 			rewardCoins(p, 7, "Know the word");
 		}

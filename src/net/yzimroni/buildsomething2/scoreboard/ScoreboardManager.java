@@ -9,6 +9,7 @@ import net.yzimroni.buildsomething2.game.Gamemode;
 import net.yzimroni.buildsomething2.game.games.BuildersGame;
 import net.yzimroni.buildsomething2.game.games.Game;
 import net.yzimroni.buildsomething2.player.BPlayer;
+import net.yzimroni.buildsomething2.player.stats.GlobalStats;
 import net.yzimroni.buildsomething2.utils.Utils;
 
 import org.bukkit.Bukkit;
@@ -144,9 +145,10 @@ public class ScoreboardManager {
 		sib.add("Know the word:");
 		sib.add("" + ChatColor.GREEN + bp.getData().getKnow());*/
 		
-		sib.add("Total games: " + ChatColor.GREEN + bp.getData().getTotalGames());
-		sib.add("Builder: " + ChatColor.GREEN + bp.getData().getBuilder());
-		sib.add("Know the word: " + ChatColor.GREEN + bp.getData().getKnow());
+		GlobalStats stats = bp.getData().getGlobalStats();
+		sib.add("Total games: " + ChatColor.GREEN + stats.getTotalGames());
+		sib.add("Builder: " + ChatColor.GREEN + stats.getBuilder());
+		sib.add("Know the word: " + ChatColor.GREEN + stats.getKnow());
 		
 		sib.build();
 		
