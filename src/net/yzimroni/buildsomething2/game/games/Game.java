@@ -22,6 +22,7 @@ import net.yzimroni.buildsomething2.player.economy.RewardInfo;
 import net.yzimroni.buildsomething2.scoreboard.SimpleScoreboard;
 import net.yzimroni.buildsomething2.utils.IntWarpper;
 import net.yzimroni.buildsomething2.utils.Utils;
+import net.yzimroni.buildsomething2.utils.WorldEditClipboard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -40,7 +41,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.blocks.BlockID;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
@@ -677,6 +680,25 @@ public abstract class Game {
 	
 	public void onInventoryClick(InventoryClickEvent e) {
 		
+	}
+	
+	@SuppressWarnings("deprecation")
+	public WorldEditClipboard createWorldEditClipboard() {
+		World world = map.getBuilder().getWorld();
+		EditSession es = new EditSession(BukkitUtil.getLocalWorld(world), Integer.MAX_VALUE);
+		
+		Vector bvmin = getRegion().getMinimumPoint();
+		Vector bvmax = getRegion().getMaximumPoint();
+		Vector pos = bvmax;
+		
+		CuboidClipboard clipboard = new CuboidClipboard(bvmax.subtract(bvmin).add(new Vector(1, 1, 1)), bvmin, bvmin.subtract(pos));
+		clipboard.copy(es);
+		
+		//TODO why "plotworld"?
+		EditSession em = new EditSession(BukkitUtil.getLocalWorld(Bukkit.getWorld("plotworld")), Integer.MAX_VALUE);
+		
+		return new WorldEditClipboard(clipboard, em);
+
 	}
 	
 	public boolean isJoinable() {

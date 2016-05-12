@@ -8,6 +8,7 @@ import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.Builders;
 import net.yzimroni.buildsomething2.game.games.Game;
 import net.yzimroni.buildsomething2.utils.Utils;
+import net.yzimroni.buildsomething2.utils.WorldEditClipboard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,6 +18,7 @@ import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.worldcretornica.plotme_core.ClearReason;
@@ -35,11 +37,12 @@ public class PlotManager {
 		npcmanager = new NPCManager(plugin);
 	}
 		
-	public PlotInfo createGameBuildPlot(Game g, Builders builders, EditSession em, CuboidClipboard clipboard) {
+	public PlotInfo createGameBuildPlot(Game g, Builders builders, WorldEditClipboard clipboard, CPlotType type) {
 		try {
 			if (g.getWord() == null) return null;
-			World world = Bukkit.getWorld("plotworld");
+			World world = Bukkit.getWorld(type.getWorld());
 			Plot plot = getFreePlot(builders.getPlayers().get(0), world.getName());
+			
 			PlotInfo info = new PlotInfo(plot.getId().toString());
 			if (builders.size() > 1) {
 				List<Player> players = builders.getPlayers();
@@ -47,6 +50,7 @@ public class PlotManager {
 					plot.addMember(players.get(i).getName(), AccessLevel.ALLOWED);
 				}
 			}
+			
 			com.worldcretornica.plotme_core.api.Vector lm = plot.getPlotTopLoc();
 			Location l = new Location(world, lm.getX(), lm.getY(), lm.getZ());
 			int step = 0;
@@ -58,15 +62,27 @@ public class PlotManager {
 				info.addBuilder(p.getUniqueId(), c.getId());
 				step++;
 			}
-			l.setY(g.getMap().getYPaste());
-			clipboard.paste(em, BukkitUtil.toVector(new Location(world, l.getX(), l.getY(), l.getZ())), false);
-			//TODO try to work with the new worldedit api
+			pastePlot(plot, g.getMap().getYPaste(), clipboard);
 			return info;
 			//return id;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public void pastePlot(Plot plot, int level, WorldEditClipboard clipboard) {
+		//TODO try to work with the new worldedit api
+		World world = Bukkit.getWorld(plot.getWorld().getName());
+		com.worldcretornica.plotme_core.api.Vector lm = plot.getPlotTopLoc();
+		Location l = new Location(world, lm.getX(), lm.getY(), lm.getZ());
+
+		l.setY(level);
+		try {
+			clipboard.getClipBoard().paste(clipboard.getEditSession(), BukkitUtil.toVector(new Location(world, l.getX(), l.getY(), l.getZ())), false);
+		} catch (MaxChangedBlocksException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private Plot getFreePlot(OfflinePlayer p, String worldname) {
@@ -239,5 +255,17 @@ public class PlotManager {
 		}
 		return -1;
 	}*/
-
+	public enum CPlotType{
+		NORMAL("plotworld"), BOT("botplot"), REPORT("reportplot");
+		
+		private String world;
+		
+		CPlotType(String world) {
+			this.world = world;
+		}
+		
+		public String getWorld() {
+			return this.world;
+		}
+	}
 }

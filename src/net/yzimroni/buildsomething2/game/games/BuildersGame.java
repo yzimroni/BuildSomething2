@@ -17,18 +17,19 @@ import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
 import net.yzimroni.buildsomething2.game.bonuses.bonuses.worldedit.WorldEditBonus;
 import net.yzimroni.buildsomething2.game.effects.effects.Effect;
 import net.yzimroni.buildsomething2.game.plots.PlotInfo;
+import net.yzimroni.buildsomething2.game.plots.PlotManager;
 import net.yzimroni.buildsomething2.player.BPlayer;
 import net.yzimroni.buildsomething2.player.economy.RewardInfo;
 import net.yzimroni.buildsomething2.utils.JsonBuilder;
 import net.yzimroni.buildsomething2.utils.JsonBuilder.ClickAction;
 import net.yzimroni.buildsomething2.utils.Utils;
+import net.yzimroni.buildsomething2.utils.WorldEditClipboard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -44,9 +45,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.sk89q.worldedit.CuboidClipboard;
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldguard.domains.DefaultDomain;
 public class BuildersGame extends Game {
@@ -55,6 +53,8 @@ public class BuildersGame extends Game {
 	private Builders builders;
 	
 	private PlotInfo plotInfo;
+	
+	private long lastReport = -1;
 	
 	public BuildersGame(GameManager gm, int buildersCount, int maxPlayers) {
 		super(gm, maxPlayers);
@@ -270,7 +270,7 @@ public class BuildersGame extends Game {
 		getRegion().setMembers(bd);
 		message("The game " + (force ? "stopped" : "ended"));
 		if (word != null) { //TODO check if this is working
-			copyWorldEdit();
+			createBuildPlot();
 		}
 		clearMapWorldEdit();
 		
@@ -356,23 +356,18 @@ public class BuildersGame extends Game {
 		super.afterEnd(stat);
 	}
 	
-	@SuppressWarnings("deprecation")
-	private void copyWorldEdit() {
-		try {
-			World world = map.getBuilder().getWorld();
-			EditSession es = new EditSession(BukkitUtil.getLocalWorld(world), Integer.MAX_VALUE);
-			Vector bvmin = getRegion().getMinimumPoint();
-			Vector bvmax = getRegion().getMaximumPoint();
-			Vector pos = bvmax;
-			if (word != null && !builders.isEmpty()) {
-				CuboidClipboard clipboard = new CuboidClipboard(bvmax.subtract(bvmin).add(new Vector(1, 1, 1)),bvmin, bvmin.subtract(pos));
-				clipboard.copy(es);
-				EditSession em = new EditSession(BukkitUtil.getLocalWorld(Bukkit.getWorld("plotworld")),Integer.MAX_VALUE);
-				//plotInfo = manager.getPlotsManager().createPlot(builders, clipboard, em, this);
-				plotInfo = manager.getPlotManager().createGameBuildPlot(this, builders, em, clipboard);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	private void createBuildPlot() {
+		if (word != null && !builders.isEmpty()) {
+			WorldEditClipboard cb = createWorldEditClipboard();
+			plotInfo = manager.getPlotManager().createGameBuildPlot(this, builders, cb, PlotManager.CPlotType.NORMAL);
+		}
+	}
+	
+	protected void createReport(Player reporter, String reason) {
+		if (word != null && !builders.isEmpty()) {
+			WorldEditClipboard cb = createWorldEditClipboard();
+			PlotInfo reportInfo = manager.getPlotManager().createGameBuildPlot(this, builders, cb, PlotManager.CPlotType.REPORT);
+			//TODO send the report data to the db
 		}
 	}
 	
@@ -619,6 +614,15 @@ public class BuildersGame extends Game {
 		}
 	}
 	
+	public boolean report(Player reporter, String reason) {
+		if (lastReport != -1 && System.currentTimeMillis() - lastReport < (20 * 1000)) {
+			reporter.sendMessage(ChatColor.RED + "You can't reported now, try again later");
+			return false;
+		}
+		createReport(reporter, reason);
+		return true;
+	}
+	
 	public int getArrowItemPage(ItemStack i) {
 		if (i == null || i.getType() == null || i.getType() != Material.ARROW) {
 			return -1;
@@ -674,6 +678,14 @@ public class BuildersGame extends Game {
 	@Override
 	public String getGameType() {
 		return getBuildersCount() + " Builder" + (getBuildersCount() == 1 ? "" : "s") + " Game";
+	}
+	
+	public long getLastReport() {
+		return lastReport;
+	}
+
+	public void setLastReport(long lastReport) {
+		this.lastReport = lastReport;
 	}
 	
 }
