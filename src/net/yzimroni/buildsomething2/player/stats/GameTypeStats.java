@@ -153,6 +153,10 @@ public class GameTypeStats {
 	public boolean isUpdated() {
 		return updated;
 	}
+	
+	public void setUpdated(boolean updated) {
+		this.updated = updated;
+	}
 
 	public boolean isLoaded() {
 		return loaded;

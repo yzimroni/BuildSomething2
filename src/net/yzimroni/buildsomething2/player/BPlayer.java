@@ -264,6 +264,7 @@ public class BPlayer {
 						index++;
 					}
 					psb.executeUpdate();
+					stat.setUpdated(false);
 				}
 			}
 			
