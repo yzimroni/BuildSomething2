@@ -57,7 +57,7 @@ public class WorldEditManager implements Listener {
 	
 	public void initBonuses() {
 		manager.addBonus(new WorldEditBasic(plugin));
-		manager.addBonus(new WorlEditAdvanced(plugin));
+		manager.addBonus(new WorldEditAdvanced(plugin));
 		manager.addBonus(new WorldEditPro(plugin));
 	}
 	

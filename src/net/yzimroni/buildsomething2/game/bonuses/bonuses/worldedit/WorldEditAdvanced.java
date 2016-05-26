@@ -10,9 +10,9 @@ import org.bukkit.Material;
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.utils.MaterialData;
 
-public class WorlEditAdvanced extends WorldEditBonus {
+public class WorldEditAdvanced extends WorldEditBonus {
 	
-	public WorlEditAdvanced(BuildSomethingPlugin p) {
+	public WorldEditAdvanced(BuildSomethingPlugin p) {
 		super(p);
 	}
 	
