@@ -20,9 +20,7 @@ public class CommandManager {
 		plugin.getCommand("money").setExecutor(money);
 		plugin.getCommand("m").setExecutor(money);
 
-		plugin.getCommand("game").setExecutor(game);
-		plugin.getCommand("bs").setExecutor(game);
-		plugin.getCommand("buildsomething").setExecutor(game);
+		game.createCommands();
 		
 		plugin.getCommand("stats").setExecutor(stats);
 		

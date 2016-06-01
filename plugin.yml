@@ -2,7 +2,7 @@ name: BuildSomething
 main: net.yzimroni.buildsomething2.BuildSomethingPlugin
 version: 0.1
 description: BuildSomething 2 plugin.
-softdepends: [WorldEdit, WorldGuard, ProtocolLib, Citizens, Party]
+softdepend: [WorldEdit, WorldGuard, ProtocolLib, Citizens, Party, CommandManager]
 authors: [yzimroni]
 commands:
   game:
