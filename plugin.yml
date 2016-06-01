@@ -7,14 +7,10 @@ authors: [yzimroni]
 commands:
   game:
     description: game
+    aliases: [bs, buildsomething]
   money:
     description: game
-  m:
-    description: game
-  bs:
-    description: game
-  buildsomething:
-    description: game
+    aliases: [m]
   stats:
     description: game
   plot:
