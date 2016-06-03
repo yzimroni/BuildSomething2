@@ -161,7 +161,7 @@ public class GameCommand {
 		return data;
 	}
 
-	@MethodId(id = "main")
+	@MethodId("main")
 	public boolean mainCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getSenderData(sender);
 		if (data.getGame() != null) {
@@ -172,7 +172,7 @@ public class GameCommand {
 		return true;
 	}
 
-	@MethodId(id = "games")
+	@MethodId("games")
 	public boolean gamesCommand(CommandSender sender, Command command, ArgumentData args) {
 		if (plugin.getGameManager().getGames().isEmpty()) {
 			sender.sendMessage("There is no games open right now :(");
@@ -192,7 +192,7 @@ public class GameCommand {
 		return true;
 	}
 
-	@MethodId(id = "select")
+	@MethodId("select")
 	public boolean selectCommand(CommandSender sender, Command command, ArgumentData args) {
 		int id = args.get("gameId", Integer.class);
 		Game g = null;
@@ -212,7 +212,7 @@ public class GameCommand {
 		return true;
 	}
 
-	@MethodId(id = "start")
+	@MethodId("start")
 	public boolean startCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
@@ -231,7 +231,7 @@ public class GameCommand {
 		return true;
 	}
 
-	@MethodId(id = "stop")
+	@MethodId("stop")
 	public boolean stopCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
@@ -249,7 +249,7 @@ public class GameCommand {
 		return true;
 	}
 
-	@MethodId(id = "word")
+	@MethodId("word")
 	public boolean wordCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
@@ -269,13 +269,13 @@ public class GameCommand {
 		return true;
 	}
 
-	@MethodId(id = "builder")
+	@MethodId("builder")
 	public boolean builderCommand(CommandSender sender, Command command, ArgumentData args) {
 		// TODO
 		return true;
 	}
 
-	@MethodId(id = "builderAdd")
+	@MethodId("builderAdd")
 	public boolean builderAddCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
@@ -301,7 +301,7 @@ public class GameCommand {
 		return true;
 	}
 
-	@MethodId(id = "builderRemove")
+	@MethodId("builderRemove")
 	public boolean builderRemoveCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
@@ -332,7 +332,7 @@ public class GameCommand {
 
 	}
 
-	@MethodId(id = "builderReset")
+	@MethodId("builderReset")
 	public boolean builderResetCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
@@ -357,7 +357,7 @@ public class GameCommand {
 		return true;
 	}
 
-	@MethodId(id = "info")
+	@MethodId("info")
 	public boolean infoCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
@@ -398,7 +398,7 @@ public class GameCommand {
 
 	}
 
-	@MethodId(id = "join")
+	@MethodId("join")
 	public boolean joinCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
@@ -424,7 +424,7 @@ public class GameCommand {
 
 	}
 
-	@MethodId(id = "leave")
+	@MethodId("leave")
 	public boolean leaveCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
@@ -447,7 +447,7 @@ public class GameCommand {
 
 	}
 
-	@MethodId(id = "openGames")
+	@MethodId("openGames")
 	public boolean openGamesCommand(CommandSender sender, Command command, ArgumentData args) {
 		if (args.has("value")) {
 			boolean open = args.get("value", Boolean.class);
@@ -468,7 +468,7 @@ public class GameCommand {
 		return true;
 	}
 
-	@MethodId(id = "close")
+	@MethodId("close")
 	public boolean closeCommand(CommandSender sender, Command command, ArgumentData args) {
 		if (args.hasFlag("flags", "all")) {
 			plugin.getGameManager().closeAll();
@@ -486,7 +486,7 @@ public class GameCommand {
 		return true;
 
 	}
-	@MethodId(id = "maxPlayers")
+	@MethodId("maxPlayers")
 	public boolean maxPlayersCommand(CommandSender sender, Command command, ArgumentData args) {
 		boolean all = args.hasFlag("flags", "all");
 		if (args.has("value")) {
