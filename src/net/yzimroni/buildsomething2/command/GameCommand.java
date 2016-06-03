@@ -271,7 +271,19 @@ public class GameCommand {
 
 	@MethodId("builder")
 	public boolean builderCommand(CommandSender sender, Command command, ArgumentData args) {
-		// TODO
+		CommandSenderData data = getCheckSenderData(sender);
+		if (data == null) {
+			return false;
+		}
+		Game g = data.getGame();
+
+		if (!(g instanceof BuildersGame)) {
+			sender.sendMessage("This is not builders game!");
+			return false;
+		}
+
+		BuildersGame bs = (BuildersGame) g;
+		sender.sendMessage("Builders (" + bs.getBuildersCount() + "): " + bs.getBuilders().toString());
 		return true;
 	}
 
