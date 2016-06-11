@@ -168,7 +168,7 @@ public class GameCommand {
 			sender.sendMessage("Game selected: " + plugin.getGameManager().getGames().indexOf(data.getGame()));
 			sender.sendMessage("");
 		}
-		command.printHelp(sender);
+		command.printHelp(sender, -1);
 		return true;
 	}
 

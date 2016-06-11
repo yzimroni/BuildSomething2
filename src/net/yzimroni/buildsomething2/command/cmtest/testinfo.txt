@@ -1,8 +1,0 @@
-1: Each command have a diffrent executer with anonymus class
-
-2 + 3: All the command have the same executer, in the executer checking the name of the command and run the code for the requested command 
-The diffrent between 2 and 3 is that in 2 the executer with switch & case and in 3 this is in if & elseif
-
-4: All the command have the same executer, in the executer checking the name of the command and call the method for the requested command
-The diffrent between this and (2 + 3) is that in 2 + 3 the command code is in the executer, here the executer call a method for the command so
-the code for each command is seprate
