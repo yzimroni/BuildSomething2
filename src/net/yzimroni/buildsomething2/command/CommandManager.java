@@ -17,8 +17,7 @@ public class CommandManager {
 		stats = new StatsCommand(plugin);
 		plot = new PlotCommand(plugin);
 		
-		plugin.getCommand("money").setExecutor(money);
-		plugin.getCommand("m").setExecutor(money);
+		money.createCommands();
 
 		game.createCommands();
 		
