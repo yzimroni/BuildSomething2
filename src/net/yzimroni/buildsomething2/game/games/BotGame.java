@@ -25,7 +25,6 @@ import net.yzimroni.buildsomething2.game.GameManager;
 import net.yzimroni.buildsomething2.game.Gamemode;
 import net.yzimroni.buildsomething2.game.PlayerInfo;
 import net.yzimroni.buildsomething2.game.effects.effects.lib.ParticleEffect;
-import net.yzimroni.buildsomething2.player.BPlayer;
 import net.yzimroni.buildsomething2.player.economy.RewardInfo;
 import net.yzimroni.buildsomething2.utils.BlockLocation;
 import net.yzimroni.buildsomething2.utils.Cuboid;
