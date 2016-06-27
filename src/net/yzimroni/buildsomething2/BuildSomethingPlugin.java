@@ -37,7 +37,7 @@ public class BuildSomethingPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		try {
-			sql = new MCSQL("127.0.0.1", "3306", "buildsomething", "root", "2YPzXyPb");
+			sql = new MCSQL("127.0.0.1", "3306", "buildsomething" /* db */, "buildsomething" /* user */, "jUaFJGNhfRZmfFHH");
 		} catch (Exception e) {
 			log.info("cant connect to the DB");
 			Bukkit.setWhitelist(true);
