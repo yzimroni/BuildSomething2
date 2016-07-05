@@ -61,6 +61,16 @@ public class BotGame extends Game {
 		gameInfo.setGameType(GameType.BOT_GAME);
 	}
 	
+	/*
+	 *  /botplot send (Require accept) - Add the player and the plot (with the time) to an hashmap (for now will do /botplot send accept)
+	 *  /botplot send accept - Set bot_request in the game tables to '1' (for now not)
+	 *  /botplot admin list - Show all games with bot_request set to '1' (V)
+	 *  /botplot admin accept <ID> - Set bot_request in the game id to '0', 
+	 *  copy the plot from the plotworld to the plotworld, set plot_type to '1' and plot_id to the new plot id (PlotManager#movePlotToBot)
+	 *  
+	 *  /botplot admin deny <ID> - Set bot_request in the game id to '0'
+	 */
+	
 	@Override
 	protected void start() {
 		if (checkClose()) {
@@ -147,7 +157,7 @@ public class BotGame extends Game {
 			public void run() {
 				blocks = new ArrayList<BlockLocation>();
 				
-				World w = Bukkit.getWorld("plotworld"); //TODO
+				World w = Bukkit.getWorld("botplot");
 				Plot pl = PlotMeCoreManager.getInstance().getPlotById(Utils.plotId(plot.getPlotId()), PlotMeCoreManager.getInstance().getWorld(w.getName()));
 				Location l1 = new Location(w, pl.getPlotBottomLoc().getBlockX(), 65, pl.getPlotBottomLoc().getBlockZ());
 				Location l2 = new Location(w, pl.getPlotTopLoc().getBlockX(), 100, pl.getPlotTopLoc().getBlockZ());

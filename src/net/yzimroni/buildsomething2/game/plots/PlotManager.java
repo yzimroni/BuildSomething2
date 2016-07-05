@@ -127,11 +127,12 @@ public class PlotManager {
 						plugin.getCommandManager().addPlotId(id, null);
 						movePlot(from, to);
 						PlotMeCoreManager.getInstance().deletePlot(from);
-						plugin.getDB().set("UPDATE games SET plot_type='1',bot_request='0',plot_id='" + to.getId() + "' WHERE ID='" + id + "'");
+						plugin.getDB().set("UPDATE games SET plot_type='1',request_bot='0',plot_id='" + to.getId() + "' WHERE ID='" + id + "'");
 						ResultSet npcs = plugin.getDB().get("SELECT npc_id FROM game_players WHERE game_id='" + id + "' AND npc_id >= 0");
 						while (npcs.next()) {
 							int npc_id = npcs.getInt("npc_id");
 							npcmanager.removeNPC(npc_id);
+							//TODO need to remove the npc id from the row as well?
 						}
 						return true;
 						/*

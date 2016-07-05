@@ -23,8 +23,7 @@ public class CommandManager {
 		
 		plugin.getCommand("stats").setExecutor(stats);
 		
-		plugin.getCommand("plot").setExecutor(plot);
-		plugin.getCommand("plottp").setExecutor(plot);
+		plot.createCommands();
 	}
 	
 	public void addPlotId(int i, String p) {
