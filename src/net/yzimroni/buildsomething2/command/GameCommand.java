@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.Gamemode;
+import net.yzimroni.buildsomething2.game.Word;
 import net.yzimroni.buildsomething2.game.games.BuildersGame;
 import net.yzimroni.buildsomething2.game.games.Game;
 import net.yzimroni.buildsomething2.utils.Utils;
@@ -74,6 +75,10 @@ public class GameCommand {
 		game.addSubCommand(stop);
 		
 		SubCommand word = new SubCommand("word", "Get the word of a game", MethodExecutor.createByMethodId(this, "word"));
+		
+		SubCommand wordSet = new SubCommand("set", "Set the word of a game", MethodExecutor.createByMethodId(this, "wordSet"));
+		wordSet.addArgument(new IntegerArgument("word", true, 0, null, false));
+		word.addSubCommand(wordSet);
 		game.addSubCommand(word);
 		
 		SubCommand builder = new SubCommand("builder", "Get the builder(s) of a game", MethodExecutor.createByMethodId(this, "builder"));
@@ -121,7 +126,18 @@ public class GameCommand {
 		maxPlayers.addArgument(flag2);
 		game.addSubCommand(maxPlayers);
 		
-
+		SubCommand time = new SubCommand("time", "Control the game time/length", MethodExecutor.createByMethodId(this, "time"));
+		
+		SubCommand timeSet = new SubCommand("set", "Set the time of the game", MethodExecutor.createByMethodId(this, "timeSet"));
+		timeSet.addArgument(new IntegerArgument("time", true, 1, null, true));
+		time.addSubCommand(timeSet);
+		
+		SubCommand timeAdd = new SubCommand("add", "Add time of the game", MethodExecutor.createByMethodId(this, "timeAdd"));
+		timeAdd.addArgument(new IntegerArgument("time", true, 1, null, true));
+		time.addSubCommand(timeAdd);
+		
+		game.addSubCommand(time);
+		
 		CommandManager.get().registerCommand(plugin, game);
 	}
 	
@@ -268,6 +284,32 @@ public class GameCommand {
 		}
 		return true;
 	}
+	
+	@MethodId("wordSet")
+	public boolean wordSetCommand(CommandSender sender, Command command, ArgumentData args) {
+		CommandSenderData data = getCheckSenderData(sender);
+		if (data == null) {
+			return false;
+		}
+		Game g = data.getGame();
+		if (g instanceof BuildersGame) {
+			BuildersGame builders = (BuildersGame) g;
+			Word w = plugin.getGameManager().getWord(args.get("word", Integer.class));
+			if (w != null) {
+				builders.setWord(w);
+				if (builders.getMode() == Gamemode.RUNNING) {
+					builders.message("The word has changed");
+					builders.sendWordInfo();
+				}
+			} else {
+				sender.sendMessage("Word not found");
+			}
+		} else {
+			sender.sendMessage("You can set the game word only on builder-game");
+		}
+		return true;
+	}
+
 
 	@MethodId("builder")
 	public boolean builderCommand(CommandSender sender, Command command, ArgumentData args) {
@@ -521,6 +563,43 @@ public class GameCommand {
 			}
 			sender.sendMessage("The global max players is " + plugin.getGameManager().getMaxPlayers());
 		}
+		return true;
+	}
+	
+	@MethodId("time")
+	public boolean timeCommand(CommandSender sender, Command command, ArgumentData args) {
+		CommandSenderData data = getCheckSenderData(sender);
+		if (data == null) {
+			return false;
+		}
+		Game g = data.getGame();
+		sender.sendMessage("Game time: " + Utils.timeString(g.getTime()));
+		return true;
+	}
+	
+	@MethodId("timeSet")
+	public boolean timeSetCommand(CommandSender sender, Command command, ArgumentData args) {
+		CommandSenderData data = getCheckSenderData(sender);
+		if (data == null) {
+			return false;
+		}
+		Game g = data.getGame();
+		int time = args.get("time", Integer.class);
+		g.setTime(time);
+		sender.sendMessage("Added " + Utils.timeString(time) + " to the game, the time of the game now: " + Utils.timeString(g.getTime()));
+		return true;
+	}
+	
+	@MethodId("timeAdd")
+	public boolean timeAddCommand(CommandSender sender, Command command, ArgumentData args) {
+		CommandSenderData data = getCheckSenderData(sender);
+		if (data == null) {
+			return false;
+		}
+		Game g = data.getGame();
+		int time = args.get("time", Integer.class);
+		g.addTime(time);
+		sender.sendMessage("Set the game time to " + Utils.timeString(time) + "");
 		return true;
 	}
 

@@ -359,8 +359,16 @@ public abstract class Game {
 		}
 	}
 	
-	public void addTime(int sec) {
-		game_count_down.setValue(game_count_down.getValue() + sec);
+	public int getTime() {
+		return game_count_down.getValue();
+	}
+	
+	public void addTime(int seconds) {
+		setTime(getTime() + seconds);
+	}
+	
+	public void setTime(int seconds) {
+		game_count_down.setValue(seconds);
 	}
 	
 	public ProtectedRegion getRegion() {

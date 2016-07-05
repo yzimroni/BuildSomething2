@@ -88,7 +88,11 @@ public class BuildersGame extends Game {
 			b.addPlayer(builder.getUniqueId());
 		}
 		getRegion().setMembers(b);
-		word = manager.randomWord();
+		if (word == null) {
+			word = manager.randomWord();
+		} else {
+			System.out.println("Game " + getId() + " word is not-random: " + word);
+		}
 		
 		
 		for (Player p : getPlayersBukkit()) {
