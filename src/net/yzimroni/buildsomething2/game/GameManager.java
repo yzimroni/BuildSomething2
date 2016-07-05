@@ -125,21 +125,35 @@ public class GameManager implements Listener {
 	private Game createNewGame() {
 		int builder1 = 0, builders = 0, bot = 0;
 		for (Game g : games) {
-			if (g instanceof BotGame) {
-				bot++;
-			} else if (g instanceof BuildersGame) {
-				BuildersGame bs = (BuildersGame) g;
-				if (bs.getBuildersCount() == 1) {
-					builder1++;
+			if (g.getMode() == Gamemode.LOBBY || g.getMode() == Gamemode.LOBBY_COUNTDOWN) {
+				if (g instanceof BotGame) {
+					bot++;
+				} else if (g instanceof BuildersGame) {
+					BuildersGame bs = (BuildersGame) g;
+					if (bs.getBuildersCount() == 1) {
+						builder1++;
+					} else {
+						builders++;
+					}
 				} else {
-					builders++;
+					System.out.println("Game is unknown type: " + g + " " + g != null ? g.getClass() : "(null)");
 				}
-			} else {
-				System.out.println("Game is unknown type: " + g + " " + g != null ? g.getClass() : "(null)");
 			}
 		}
 		
-		if (Bukkit.getOnlinePlayers().size() >= 8) {
+		if (builder1 == 0) {
+			return new BuildersGame(this, 1, maxPlayers);
+		}
+		if (builders == 0) {
+			return new BuildersGame(this, 2, maxPlayers);
+		}
+		if (Bukkit.getOnlinePlayers().size() <= 5) {
+			if (bot == 0) {
+				return new BotGame(this, maxPlayers);
+			}
+		}
+		System.out.println("we dont need more games 153");
+		/*if (Bukkit.getOnlinePlayers().size() >= 8) {
 			if (builder1 < 3) {
 				return new BuildersGame(this, 1, maxPlayers);
 			} else if (builders < 3) {
@@ -158,7 +172,7 @@ public class GameManager implements Listener {
 			} else {
 				System.out.println("we dont need more games 133");
 			}
-		}
+		}*/
 		return null;
 	}
 	
@@ -724,7 +738,7 @@ public class GameManager implements Listener {
 	}
 	
 	private int getMaxGameLimit() {
-		return 6;
+		return 3;
 	}
 
 	/**

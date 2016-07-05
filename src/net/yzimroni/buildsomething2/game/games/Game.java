@@ -468,7 +468,7 @@ public abstract class Game {
 
 			@Override
 			public int compare(Entry<UUID, RewardInfo> i, Entry<UUID, RewardInfo> n) {
-				return n.getValue().getTimeTook().compareTo(i.getValue().getTimeTook());
+				return i.getValue().getTimeTook().compareTo(n.getValue().getTimeTook());
 			}
 		});
 		
@@ -477,7 +477,7 @@ public abstract class Game {
 			
 			for (int i = 0; i < Math.min(5, o.size()); i++) {
 				Entry<UUID, RewardInfo> p = o.get(i);
-				message(ChatColor.YELLOW + "" + (i + 1) + ". " + Bukkit.getOfflinePlayer(p.getKey()).getName() + " in " + Utils.foramtTimeShort(p.getValue().getTimeTook().longValue()));
+				message(ChatColor.YELLOW + "" + (i + 1) + ". " + Bukkit.getOfflinePlayer(p.getKey()).getName() + " in " + Utils.foramtTimeShort(p.getValue().getTimeTook().longValue() / 1000));
 			}
 		}
 		
