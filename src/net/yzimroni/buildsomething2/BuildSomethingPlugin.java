@@ -13,6 +13,11 @@ import net.yzimroni.buildsomething2.utils.MCSQL;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
+import org.bukkit.event.player.PlayerPreLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -38,12 +43,20 @@ public class BuildSomethingPlugin extends JavaPlugin {
 	public void onEnable() {
 		try {
 			sql = new MCSQL("127.0.0.1", "3306", "buildsomething" /* db */, "buildsomething" /* user */, "jUaFJGNhfRZmfFHH");
+			sql.openConnecting();
 		} catch (Exception e) {
 			log.info("cant connect to the DB");
+			e.printStackTrace();
 			Bukkit.setWhitelist(true);
+			Bukkit.getPluginManager().registerEvents(new Listener() {
+				@EventHandler
+				public void onPlayerLogin(AsyncPlayerPreLoginEvent e) {
+					e.disallow(Result.KICK_OTHER, "Server Data error");
+				}
+			}, this);
 			if (Bukkit.getOnlinePlayers().size() > 0) {
 				for (Player p : Bukkit.getOnlinePlayers()) {
-					p.kickPlayer("SERVER ERROR");
+					p.kickPlayer("Server data error");
 				}
 			}
 			return;

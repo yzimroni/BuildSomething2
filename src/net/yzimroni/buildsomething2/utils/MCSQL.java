@@ -17,9 +17,6 @@ public class MCSQL {
 
 	public MCSQL(String host, String port, String database, String username, String password) {
 		ms = new MySQL(host, port, database, username, password);
-		openConnecting();
-		ms.REPASS();
-		password = "123";
 	}
 
 	public void disable() {
@@ -36,13 +33,9 @@ public class MCSQL {
 		return !hasConnecting();
 	}
 
-	public boolean openConnecting() {
-		try {
-			ms.open();
-		} catch (Exception e) {
-			return false;
-		}
-		return hasConnecting();
+	public boolean openConnecting() throws Exception {
+		ms.open();
+		return ms.checkConnection();
 	}
 
 	public PreparedStatement getPrepare(String s) {
@@ -129,23 +122,20 @@ class MySQL extends Database {
 		this.password = password;
 	}
 
-	public Connection open() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			this.c = DriverManager.getConnection("jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database, this.user, this.password);
-			this.password = "123";
-			return c;
+	public Connection open() throws Exception {
+		Class.forName("com.mysql.jdbc.Driver");
+		this.c = DriverManager.getConnection("jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database, this.user, this.password);
+		this.password = "123";
+		return c;
+
+		/*try {
 
 		} catch (SQLException e) {
 			System.out.println("Could not connect to MySQL server! because: " + e.getMessage());
 		} catch (ClassNotFoundException e) {
 			System.out.println("JDBC Driver not found!");
-		}
-		return this.c;
-	}
-
-	public void REPASS() {
-		password = "123";
+		}*/
+		//return this.c;
 	}
 
 	public boolean checkConnection() {
