@@ -177,7 +177,7 @@ public class PlotCommand {
 	public boolean adminPlotAccept(CommandSender sender, Command command, ArgumentData args) {
 		Player p = (Player) sender;
 		int plotId = args.get("plot", Integer.class);
-		plugin.getGameManager().getPlotManager().movePlotToBot(plotId, p);
+		//plugin.getGameManager().getPlotManager().movePlotToBot(plotId, p);
 		return true;
 	}
 	
