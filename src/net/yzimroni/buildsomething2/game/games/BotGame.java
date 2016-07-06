@@ -157,7 +157,7 @@ public class BotGame extends Game {
 			public void run() {
 				blocks = new ArrayList<BlockLocation>();
 				
-				World w = Bukkit.getWorld("botplot");
+				World w = Bukkit.getWorld("plotworld");
 				Plot pl = PlotMeCoreManager.getInstance().getPlotById(Utils.plotId(plot.getPlotId()), PlotMeCoreManager.getInstance().getWorld(w.getName()));
 				Location l1 = new Location(w, pl.getPlotBottomLoc().getBlockX(), 65, pl.getPlotBottomLoc().getBlockZ());
 				Location l2 = new Location(w, pl.getPlotTopLoc().getBlockX(), 100, pl.getPlotTopLoc().getBlockZ());
@@ -240,7 +240,7 @@ public class BotGame extends Game {
 			l.getBlock().setType(bl.getType());
 			l.getBlock().setData(bl.getData());
 			
-			ParticleEffect.LAVA.display(new Vector(1, 1, 1), 0, l, 400);
+			//ParticleEffect.LAVA.display(new Vector(1, 1, 1), 0, l, 400);
 			//ParticleEffect.PORTAL.display(new Vector(1, 1, 1), 2, l, 400);
 			//TODO effect and maybe NPC
 			block_index++;

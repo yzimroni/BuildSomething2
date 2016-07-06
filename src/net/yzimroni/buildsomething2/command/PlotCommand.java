@@ -153,7 +153,7 @@ public class PlotCommand {
 			return false;
 		}
 		setPlotBotRequest(plot.getId().toString(), true);
-		p.sendMessage(ChatColor.GREEN + "You send your plot to the staff review");
+		p.sendMessage(ChatColor.GREEN + "You send your plot to staff review");
 		//TODO send a message to online staff
 		return true;
 	}
@@ -175,9 +175,9 @@ public class PlotCommand {
 	}
 	
 	public boolean adminPlotAccept(CommandSender sender, Command command, ArgumentData args) {
+		Player p = (Player) sender;
 		int plotId = args.get("plot", Integer.class);
-		//TODO
-		//plugin.getGameManager().getPlotManager().movePlotToBot(from)
+		plugin.getGameManager().getPlotManager().movePlotToBot(plotId, p);
 		return true;
 	}
 	
@@ -207,7 +207,7 @@ public class PlotCommand {
 			if (plot != null) {
 				if (plot.getOwnerId() != null) {
 					if (check_p) {
-						if (plot.getOwner().equals(p.getUniqueId()) || plot.isMember(p.getUniqueId()).isPresent()) {
+						if (plot.getOwnerId().equals(p.getUniqueId()) || plot.isMember(p.getUniqueId()).isPresent()) {
 							return plot;
 						}
 					} else {
@@ -221,6 +221,7 @@ public class PlotCommand {
 	}
 	
 	private void setPlotBotRequest(String plot_id, boolean mode) {
+		System.out.println(plot_id + " " + mode);
 		plugin.getDB().set("UPDATE games SET request_bot=" + (mode ? "1" : "0") + " WHERE plot_id='" + plot_id + "'");
 	}
 
