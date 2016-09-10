@@ -1,17 +1,3 @@
-/**
- * TODO
- * Create a system that save the builds (for know, use the normal plot world, after this maybe other plot world?)
- * 2 plots world, 1 normal and the other is the bot plot world
- * there will be a table in the db (bot_plot) with the plot id, and info about the build (word id, who build that etc...)
- * 
- * System that randomaly choose the build to build (if one of the players in the game played in this build, so not this build)
- * System that build the blocks V
- * Ensure that special blocks dont drop (like ladder) V
- * 
- * Maybe emulte time to end X
- * 
- */
-
 package net.yzimroni.buildsomething2.game.games;
 
 import java.util.ArrayList;
@@ -61,16 +47,6 @@ public class BotGame extends Game {
 		gameInfo.setGameType(GameType.BOT_GAME);
 	}
 	
-	/*
-	 *  /botplot send (Require accept) - Add the player and the plot (with the time) to an hashmap (for now will do /botplot send accept)
-	 *  /botplot send accept - Set bot_request in the game tables to '1' (for now not)
-	 *  /botplot admin list - Show all games with bot_request set to '1' (V)
-	 *  /botplot admin accept <ID> - Set bot_request in the game id to '0', 
-	 *  copy the plot from the plotworld to the plotworld, set plot_type to '1' and plot_id to the new plot id (PlotManager#movePlotToBot)
-	 *  
-	 *  /botplot admin deny <ID> - Set bot_request in the game id to '0'
-	 */
-	
 	@Override
 	protected void start() {
 		if (checkClose()) {
@@ -84,7 +60,7 @@ public class BotGame extends Game {
 		setMode(Gamemode.RUNNING);
 
 		plot = manager.randomBotPlot(getPlayersBukkit());
-		System.out.println("plot id: " + plot.getPlotId() + "," + plot.getId()); //TODO its just for testing, remvoe it later
+		System.out.println("plot id: " + plot.getPlotId() + "," + plot.getId()); //TODO its just for debugging, remove it later
 		word = manager.getWord(plot.getWordId());
 		
 		
@@ -103,25 +79,6 @@ public class BotGame extends Game {
 				if (plot.getBuilders().size() == 1) {
 					message("The original builder is " + Bukkit.getOfflinePlayer(plot.getBuilders().get(0)).getName());
 				} else {
-					/*String result = "";
-					String last_name = "";
-					for (UUID u : plot.getBuilders()) {
-						String name = Bukkit.getOfflinePlayer(u).getName();
-						if (!last_name.isEmpty()) {
-							if (!result.isEmpty()) {
-								result += ", ";
-							}
-							result += last_name;
-						}
-						last_name = name;
-					}
-					if (!last_name.isEmpty()) {
-						if (!result.isEmpty()) {
-							result += " and ";
-						}
-						result += last_name;
-					}*/
-					
 					String result = Utils.formatPlayerList(plot.getBuilders()); //TODO check
 					
 					message("The original builders are " + result);
@@ -184,7 +141,7 @@ public class BotGame extends Game {
 	private void handleBlock(Block b, int x, int y, int z) {
 		if (b.getY() <= 64) {
 			System.out.println("handleblock return due y is less 64: " + b.getY() + ", " + b);
-			return; //We dont want to copy the grass block from the plot
+			return;
 		}
 		if (b.getType() == Material.SAND || b.getType() == Material.GRAVEL) {
 			Block bc = b.getLocation().add(0, -1, 0).getBlock();
@@ -357,7 +314,5 @@ public class BotGame extends Game {
 	public String getGameType() {
 		return "Bot Game";
 	}
-	
-	//TO DO get the blocks need to build and build them
-	
+		
 }

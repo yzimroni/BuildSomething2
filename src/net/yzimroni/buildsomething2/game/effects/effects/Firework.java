@@ -33,7 +33,6 @@ public class Firework extends Effect {
 		fwm.setPower(power);
 		Builder effect1 = FireworkEffect.builder();
 		effect1.with(type);
-		// effect1.withColor(Color.RED);
 		if (colors.size() != 0) {
 			for (Color c : colors) {
 				effect1.withColor(c);
@@ -43,7 +42,6 @@ public class Firework extends Effect {
 		effect1.withFlicker();
 		fwm.addEffect(effect1.build());
 
-		// fwm.addEffect(FireworkEffect.Type.BALL_LARGE);
 		fw.setFireworkMeta(fwm);
 		return fw;
 

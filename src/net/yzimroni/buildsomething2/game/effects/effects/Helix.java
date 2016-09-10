@@ -42,7 +42,6 @@ public class Helix extends Effect {
 	        double x = radius * Math.cos(y);
 	        double z = radius * Math.sin(y);
 	        Location s = new Location(loc.getWorld(), (float) (loc.getX() + x), (float) (loc.getY() + y), (float) (loc.getZ() + z));
-	        //Bukkit.getPlayer("yzimroni").sendBlockChange(s, Material.GLASS, (byte) 0);
 	        ParticleEffect.FIREWORKS_SPARK.display(0, 0, 0, 0, 1, s, 300);
 	    }
 	}

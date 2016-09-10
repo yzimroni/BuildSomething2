@@ -424,10 +424,6 @@ public class GameCommand {
 		if (g.getMap() != null) {
 			sender.sendMessage("Map: " + g.getMap().getName());
 		}
-		/*
-		 * if (g.getWord() != null) { sender.sendMessage("Word: " +
-		 * g.getWord().getWordEnglish()); }
-		 */
 		if (g instanceof BuildersGame) {
 			BuildersGame bs = (BuildersGame) g;
 			if (!bs.getBuilders().isEmpty()) {

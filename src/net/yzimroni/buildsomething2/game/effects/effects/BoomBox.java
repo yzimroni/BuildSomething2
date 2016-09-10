@@ -86,12 +86,6 @@ public class BoomBox extends Effect {
 	
 	private Material randomMaterial() {
 		return MATERIALS[new Random().nextInt(MATERIALS.length)];
-		/*if (Boolean.valueOf(true)) return Material.DIAMOND_SWORD;
-		Material m = Material.values()[new Random().nextInt(Material.values().length)];
-		if (m == Material.AIR) {
-			m = Material.STONE;
-		}
-		return m;*/
 	}
 
 	@Override

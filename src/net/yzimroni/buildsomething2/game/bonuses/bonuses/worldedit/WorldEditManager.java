@@ -77,16 +77,6 @@ public class WorldEditManager implements Listener {
 	}
 	
 	private LocalSession getLocalSession(Player p){
-		
-	    /*@Override
-	    public Collection<Actor> getConnectedUsers() {
-	        List<Actor> users = new ArrayList<Actor>();
-	        for (org.bukkit.entity.Player player : Bukkit.getServer().getOnlinePlayers()) {
-	            users.add(new BukkitPlayer(plugin, this, player));
-	        }
-	        return users;
-	    }*/
-		
 		LocalSession session = WorldEdit.getInstance().getSessionManager().get(new BukkitPlayer(worldEdit, WorldEdit.getInstance().getServer(), p));
 		return session;
 	}
@@ -97,11 +87,8 @@ public class WorldEditManager implements Listener {
 		Vector pos2 = g.getRegion().getMaximumPoint();
 		
 		CuboidRegion cr = new CuboidRegion((com.sk89q.worldedit.world.World) BukkitUtil.getLocalWorld(g.getMap().getBuilder().getWorld()), pos1, pos2);
-		
-		//MaskIntersection mask = new MaskIntersection();
-		
+				
 		RegionMask rm = new RegionMask(cr);
-		//mask.add(rm);
 		
 		LocalConfiguration lc = newConfig();
 		lc.allowedBlocks.clear();
@@ -144,11 +131,6 @@ public class WorldEditManager implements Listener {
 			command = command.substring(command.indexOf(":") + 1);
 		}
 		command = command.trim();
-		/**
-		 * TO DO if the command is worldedit command that we give permission to it to builders,
-		 * check if the prossesing player is a builder or an admin, if not, cancel the event and warn the console
-		 * */
-		
 		if (we_commands.contains(command.toLowerCase())) {
 			if (!e.getPlayer().isOp() && !plugin.getGameManager().isBuilder(e.getPlayer())) {
 				e.getPlayer().sendMessage(ChatColor.RED + "You are not permitted to do that, Are you in the right mode?");

@@ -27,7 +27,7 @@ public class BSBlock implements HotbarItem {
 		} else {
 			@SuppressWarnings("deprecation")
 			ItemStack temp = new ItemStack(type, 1, (short) 0, data);
-			i = temp; //Walk-around for the depected warning
+			i = temp; //Walk-around for the deprecated warning
 		}
 		if (hasName()) {
 			ItemMeta im = i.getItemMeta();

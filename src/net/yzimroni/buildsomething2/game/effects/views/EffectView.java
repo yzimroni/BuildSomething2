@@ -52,13 +52,7 @@ public abstract class EffectView {
 			e = plugin.getGameManager().getEffectsManager().getEffectById(2);
 		}
 		int def_player = p.getData().getEffectChoose(getId());
-		//TO DO get the default effect of the player for the effectuse;
-		
-		
-		//if (def_player == -1 || !p.getData().hasEffect(def_player)) {
-			
-		//} else {
-		if (def_player != -1/* && p.getData().hasEffect(def_player)*/) {
+		if (def_player != -1) {
 			Effect temp = plugin.getGameManager().getEffectsManager().getEffectById(def_player);
 			if (temp.has(p)) {
 				if (temp.canBeUse(getId())) {

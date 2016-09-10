@@ -98,14 +98,12 @@ public abstract class WorldEditBonus extends Bonus {
 	
 	private void givePermission(Player p, String perm) {
 		p.addAttachment(plugin, perm, true);
-		//TO DO move this to permissionsex/vault api
 		
 	}
 	
 	private void removePermission(Player p, String perm) {
 		p.addAttachment(plugin, perm, false);
-		//TO DO move this to permissionsex/vault api
-		//TODO check THIS!!!!!!!
+		//TODO check THIS!
 	}
 	
 	@Override
@@ -115,7 +113,6 @@ public abstract class WorldEditBonus extends Bonus {
 			for (BPlayer bp : bs.getBuilders().getBPlayers()) {
 				if (has(bp)) {
 					Player p = bp.getPlayer();
-					//TO DO remove all the permissions from the player
 					for (Entry<String, String> o : getCommands().entrySet()) {
 						removePermission(p, o.getValue());
 					}
@@ -129,11 +126,9 @@ public abstract class WorldEditBonus extends Bonus {
 		if (canUse(g, bp)) {
 			if (has(bp)) {
 				Player p = bp.getPlayer();
-				//TO DO remove all the permissions from the player
 				for (Entry<String, String> o : getCommands().entrySet()) {
 					removePermission(p, o.getValue());
 				}
-				//TO DO check
 			}
 		}
 	}

@@ -49,8 +49,6 @@ public class Timebomb extends Bonus {
 		}
 	}
 	
-	
-
 	@Override
 	public void onGameStop(Game g) {
 		for (BPlayer p : g.getPlayers()) {

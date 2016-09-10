@@ -111,8 +111,6 @@ public class BlockShop implements Listener {
 					}
 					ItemStack is = b.toItemStack();
 					ItemMeta im = is.getItemMeta();
-					//TO DO check if this is work
-					//TO DO find a way to add the item name
 					im.setDisplayName(ChatColor.AQUA + "Price: " + ChatColor.GREEN + b.getPrice() + "$");
 					im.setLore(Arrays.asList("SHOPITEM", "ID:" + b.getId()));
 					
@@ -182,7 +180,6 @@ public class BlockShop implements Listener {
 	}
 	
 	public boolean buyBlock(BPlayer p, int id) {
-		//BSBlock b = getByType(type, data);
 		BSBlock b = manager.getBlockById(id);
 		if (b.getPrice() == 0) {
 			p.getPlayer().sendMessage("This Block is free!");
@@ -200,7 +197,6 @@ public class BlockShop implements Listener {
 				return true;
 			} else {
 				p.getPlayer().sendMessage("You dont have enough money");
-				//return false;
 			}
 		}
 		return false;

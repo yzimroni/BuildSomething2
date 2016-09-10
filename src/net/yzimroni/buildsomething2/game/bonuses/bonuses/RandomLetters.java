@@ -126,7 +126,6 @@ public class RandomLetters extends Bonus {
 			String result = "";
 			boolean oneplaced = false, twoplaced = false;
 			boolean placeAsOne = (lettersIndex[0] + 1) == lettersIndex[1];
-			//System.out.println(placeAsOne);
 			if (lettersIndex[0] == 0) {
 				if (placeAsOne) {
 					result += word.substring(0, 2);
@@ -174,7 +173,6 @@ public class RandomLetters extends Bonus {
 						}
 					}
 				}
-				//System.out.println("added " + length + " " + i);
 				result += "?";
 				
 			}
@@ -187,9 +185,6 @@ public class RandomLetters extends Bonus {
 					result += word.substring(lettersIndex[1], lettersIndex[1] + 1);
 				}
 				twoplaced = true;
-
-				/*result += word.substring(lettersIndex[1], lettersIndex[1] + 1);
-				twoplaced = true;*/
 			}
 			
 			return result;
@@ -236,26 +231,6 @@ public class RandomLetters extends Bonus {
 		return letters;
 	}
 	
-	/*@Override
-	public void onUse(Game g, BPlayer p) {
-		if (canUse(g, p)) {
-			RandomLettersInfo info = getRandomLetters(g.getWord().getWordEnglish(), g.hasMetadata(plugin.getGameManager().getBonusesManager().getById(3).metadataRaw(p.getPlayer().getName())));
-			if (info.error) {
-				p.getPlayer().sendMessage(info.text);
-			} else {
-				g.setMetadata(metadata(p.getPlayer().getName()), "true");
-				p.getPlayer().getInventory().remove(getItem());
-				takeBonus(p);
-				g.setMetadata(metadataRaw(p.getPlayer().getName()), "" + info.first + ";" + info.second);
-				g.messagePlayer(p.getPlayer(), "The random letters of the english word: " + "\n" + info.text);
-				plugin.getActionBar().sendActionBar(p.getPlayer(), info.text);
-			}
-		} else {
-			sendCantUseMessage(p.getPlayer());
-		}
-	}*/
-
-
 	@Override
 	public void onGameStop(Game g) {
 		for (BPlayer p : g.getPlayers()) {

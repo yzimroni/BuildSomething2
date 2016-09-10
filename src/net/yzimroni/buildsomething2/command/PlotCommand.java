@@ -32,15 +32,6 @@ import net.yzimroni.commandmanager.manager.CommandManager;
 
 public class PlotCommand {
 	
-	/*
-	 * To change where plot waiting to staff review saved:
-	 * Create the new place (new table etc)
-	 * move to old bot_request colom to the new one
-	 * delete bot_request from the game table
-	 * Update method setPlotBotRequest and adminPlotList
-	 * 
-	 */
-
 	private BuildSomethingPlugin plugin;
 	private HashMap<Integer, String> cache = new HashMap<Integer, String>();
 	private HashMap<UUID, Long> times = new HashMap<UUID, Long>();
@@ -104,7 +95,7 @@ public class PlotCommand {
 	
 	public boolean plotTp(CommandSender sender, Command command, ArgumentData args) {
 
-		Player p = (Player) sender; //Safe cast, the command only allow to execute from a player
+		Player p = (Player) sender; //Safe cast, the command only allowed to be executed from a player
 		int id = args.get("plotid", Integer.class);
 		String plot_id = null;
 		if (cache.containsKey(id)) {

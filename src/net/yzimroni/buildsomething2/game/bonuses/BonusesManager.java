@@ -23,7 +23,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class BonusesManager implements Listener {
 	public BuildSomethingPlugin plugin;
-	//private HashMap<Integer, Bonus> bonuses;
 	private List<Bonus> bonuses;
 	private WorldEditManager worldeditmanager;
 	
@@ -38,10 +37,6 @@ public class BonusesManager implements Listener {
 	
 	private void initBonuses() {
 		addBonus(new Timebomb(plugin));
-		/*addBonus(new RandomLettersEnglish(plugin));
-		addBonus(new RandomLettersHebrew(plugin));
-		addBonus(new NumberOfLettersEnglish(plugin));
-		addBonus(new NumberOfLettersHebrew(plugin));*/
 		addBonus(new ChangeWord(plugin));
 		addBonus(new NumberOfLetters(plugin));
 		addBonus(new RandomLetters(plugin));
@@ -72,7 +67,6 @@ public class BonusesManager implements Listener {
 	}
 	
 	public Bonus getById(int id) {
-		//return bonuses.get(id);
 		for (Bonus b : getBonuses()) {
 			if (b.getId() == id) {
 				return b;

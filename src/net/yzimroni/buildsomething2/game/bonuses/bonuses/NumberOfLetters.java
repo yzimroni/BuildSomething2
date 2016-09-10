@@ -103,36 +103,6 @@ public class NumberOfLetters extends Bonus {
 		return word;
 	}
 
-	/*@Override
-	public void onUse(Game g, BPlayer p) {
-		if (canUse(g, p)) {
-			g.setMetadata(metadata(p.getPlayer().getName()), "true");
-			g.setMetadata(metadataRaw(p.getPlayer().getName()), "true");
-			p.getPlayer().getInventory().remove(getItem());
-			takeBonus(p);
-			String meta = plugin.getGameManager().getBonusesManager().getById(1).metadataRaw(p.getPlayer().getName());
-			String i = "";
-			boolean error = false;
-			if (g.hasMetadata(meta)) {
-				String m = g.getMetadata(meta);
-				String[] split = m.split(";");
-				RandomLettersInfo ri = ((RandomLetters) plugin.getGameManager().getBonusesManager().getById(1)).formatMessage(g.getWord().getWordEnglish(), Integer.valueOf(split[0]), Integer.valueOf(split[1]), true);
-				error = ri.error;
-				i = ri.text;
-			} else {
-				 i = getNumberOfLetters(g.getWord().getWordEnglish());
-			}
-			if (error) {
-				p.getPlayer().sendMessage(i);
-			} else {
-				g.messagePlayer(p.getPlayer(), "Number of letters in the english word: " + i);
-				plugin.getActionBar().sendActionBar(p.getPlayer(), i);
-			}
-		} else {
-			sendCantUseMessage(p.getPlayer());
-		}
-	}*/
-
 	@Override
 	public void init() {
 		

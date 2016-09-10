@@ -66,14 +66,6 @@ public class BlockManager {
 	public List<BSBlock> getBlocks(BPlayer p) {
 		List<BSBlock> pblocks = new ArrayList<BSBlock>();
 		
-		/*for (int id : p.getData().getBlocks()) {
-			BSBlock b = getById(id);
-			if (b != null) {
-				pblocks.add(b);
-			} else {
-				plugin.log.warning("BSBlock null in getBlocks(" + p.getUUID() + "): block id " + id);
-			}
-		}*/
 		for (BSBlock b : blocks) {
 			if (hasBlockAndFree(p, b)) {
 				pblocks.add(b);
@@ -96,7 +88,6 @@ public class BlockManager {
 		}
 		String result = "";
 		
-		//for (int i = 0; i<blocks.si; i++) {
 		for (Entry<Integer, ItemStack> i : items.entrySet()) {
 			ItemStack item = i.getValue();
 			if (item == null || item.getType() == null || item.getType() == Material.AIR || item.getAmount() == 0) {
@@ -124,20 +115,16 @@ public class BlockManager {
 			return null;
 		}
 		
-		//BSBlock[] blocks = new BSBlock[]{};
 		HashMap<Integer, BSBlock> blocks = new HashMap<Integer, BSBlock>();		
 		String[] blocksitems = hotbar.split(";");
 		for (String block : blocksitems) {
-			//System.out.println("1");
 			String[] parts = block.split(":");
 			if (parts.length == 2) {
-				//System.out.println("2");
 				int slot = Utils.getInt(parts[0]);
 				int block_id = Utils.getInt(parts[1]);
 				blocks.put(slot, getBlockById(block_id));
 			}
 		}
-		//System.out.println("size: " + blocks.size());
 		return blocks;
 	}
 	

@@ -66,7 +66,6 @@ public abstract class Effect {
 
 	protected List<Integer> all() {
 		return plugin.getGameManager().getEffectsManager().getEffectViewsIds();
-		//return Arrays.asList(0, 1);
 	}
 	
 	protected List<Integer> allWithout(List<Integer> l) {

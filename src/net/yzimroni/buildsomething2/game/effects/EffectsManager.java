@@ -165,9 +165,7 @@ public class EffectsManager implements Listener {
 		for (EffectView e : views.values()) {
 			ItemStack s = e.getItem();
 			if (e.has(bp)) {
-				//Utils.addGlow(s);
-				//TO DO propper item
-				Utils.addGlow(s); //TO DO check if this is working, this is working
+				Utils.addGlow(s);
 			}
 			i.addItem(s);
 		}
@@ -192,7 +190,6 @@ public class EffectsManager implements Listener {
 	}
 	
 	public void openBuyEffectViewInv(Player p, EffectView eu) {
-		//BPlayer bp = plugin.getPlayerManager().getPlayer(p);
 		Inventory i = Bukkit.createInventory(p, 9, BUY_EFFECTS_VIEWS_TITLE);
 		i.addItem(eu.getItem());
 		i.addItem(getAcceptItem());

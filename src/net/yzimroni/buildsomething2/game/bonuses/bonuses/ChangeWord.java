@@ -45,12 +45,7 @@ public class ChangeWord extends Bonus {
 		if (isBuildersGame(g)) {
 			final BuildersGame bs = (BuildersGame) g;
 			for (BPlayer b : bs.getBuilders().getBPlayers()) {
-				//BPlayer b = g.getBuilder();
-				//if ()
-				//if (has(b)) {
 				b.getPlayer().getInventory().setItem(Utils.getFirstFreeInvSlot(b.getPlayer().getInventory()), getItem());
-				//b.getPlayer().getInventory().addItem(getItem());
-				//}
 			}
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				
@@ -87,11 +82,9 @@ public class ChangeWord extends Bonus {
 					b.getInventory().remove(getItem());
 					bs.setMetadata(metadata() + "_over", "true");
 				}
-				//p.getPlayer().getInventory().remove(getItem());
 				bs.changeWord();
 				g.message(ChatColor.AQUA + "The builder " + ChatColor.GREEN + p.getPlayer().getName() + ChatColor.AQUA + " changed the word!");
 				bs.sendWordInfo();
-				//g.message(ChatColor.AQUA + "The builder " + ChatColor.GREEN + p.getPlayer().getName() + ChatColor.AQUA + " used " + ChatColor.GREEN + getName() + ChatColor.AQUA + " and added " + ChatColor.GREEN + Utils.timeString(sec) + ChatColor.AQUA + " to the game!");
 			} else {
 				sendCantUseMessage(p.getPlayer());
 			}
