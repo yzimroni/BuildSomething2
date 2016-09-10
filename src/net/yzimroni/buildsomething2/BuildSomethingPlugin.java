@@ -33,7 +33,6 @@ public class BuildSomethingPlugin extends JavaPlugin {
 	private GameManager gamemanager;
 	private CommandManager commandmanager;
     private ProtocolManager protocollib;
-    //private PotionsEffectRemover pfr;
     private BSProtocolLib bsprotocollib;
     private ScoreboardManager scoreboardmanager;
     private TopPlayers top;
@@ -74,7 +73,6 @@ public class BuildSomethingPlugin extends JavaPlugin {
 		playermanager = new PlayerManager(this);
 		gamemanager = new GameManager(this);
 		commandmanager = new CommandManager(this);
-		//pfr = new PotionsEffectRemover(this);
 		bsprotocollib = new BSProtocolLib(this);
 		
 		

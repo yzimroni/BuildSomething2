@@ -75,14 +75,6 @@ public class ScoreboardManager {
 		sib.add(new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
 		sib.add("Game Id: " + g.getNumberId());
 		sib.blankLine();
-		/*if (g.getBuilders().size() == 1) {
-			sib.add("Builder: " + g.getBuilders().getPlayers().get(0).getName());
-		} else {
-			sib.add("Builders:");
-			for (Player p : g.getBuilders().getPlayers()) {
-				sib.add(p.getName());
-			}
-		}*/
 		if (g.getMode() == Gamemode.RUNNING) {
 			if (g instanceof BuildersGame) {
 				BuildersGame bsg = (BuildersGame) g;
@@ -119,7 +111,6 @@ public class ScoreboardManager {
 		BPlayer bp = plugin.getPlayerManager().getPlayer(p);
 		
 		sib.add("Blocks: " + ChatColor.GREEN + bp.getData().getBlocks().size());
-		//sib.add("");
 		sib.blankLine();
 		//sib.blankLine();
 		/**

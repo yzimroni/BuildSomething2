@@ -25,7 +25,6 @@ public class PlayerManager implements Listener {
 	private HashMap<UUID, BPlayer> bplayers;
 	private Economy economy;
 	private AchievementManager achievementManager;
-	//private PartyManager partyManager;
 	
 	
 	public PlayerManager(BuildSomethingPlugin p) {
@@ -77,7 +76,7 @@ public class PlayerManager implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		loadPlayer(e.getPlayer().getUniqueId());
 		BPlayer b = getPlayer(e.getPlayer());
-		b.setLastIp(e.getPlayer().getAddress().getAddress().getHostAddress()); //TO DO
+		b.setLastIp(e.getPlayer().getAddress().getAddress().getHostAddress());
 		b.setLoginTimes(b.getLoginTimes() + 1);
 		String header = ChatColor.GREEN + "Build Something " + ChatColor.AQUA + "2"
 				+ "\n";
