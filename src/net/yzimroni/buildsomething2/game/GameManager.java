@@ -301,16 +301,6 @@ public class GameManager implements Listener {
 					nonparty.add(p);
 				}
 			}
-			
-			/**
-			 * list: player without party V
-			 * if we choose player with party, check if the party has eneogh players V
-			 * if we choose player without party, check is there is engoeh player without party (in the list) V
-			 * 
-			 * if b has no party, get another player without party and add them to the builders V
-			 * if b has no party and there is no other player without party, try again (in for) V
-			 * if b has party, get random player from the party and add them as a builder V
-			 */
 			for (int num = 0; num < 5; num++) {
 				g.getBuilders().clear();
 				Player b = randomOneBuilder(g.getPlayersBukkit());
@@ -335,7 +325,7 @@ public class GameManager implements Listener {
 				} else {
 					if (nonparty.size() >= g.getBuildersCount()) {
 						for (int i = 0; i < g.getBuildersCount() * 5; i++) {
-							Player pt = randomOneBuilder(nonparty);//nonparty.get(new Random().nextInt(nonparty.size()));
+							Player pt = randomOneBuilder(nonparty);
 							if (g.getBuilders().isBuilder(b)) {
 								continue; //The same player...
 							}
@@ -479,12 +469,6 @@ public class GameManager implements Listener {
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent e) {
-		
-	    /*Entity vehicle = e.getPlayer().getVehicle();
-
-	    if ((vehicle != null) && (vehicle instanceof Arrow))
-	      vehicle.remove();*/
-		
 		for (Game g : games) {
 			if (g.check(e.getPlayer())) {
 				g.onPlayerQuit(e);
@@ -521,35 +505,14 @@ public class GameManager implements Listener {
 				g.onBlockBreak(e);
 			}
 		}
-		
 		//TODO make worldguard handle this
 		if (!ingame) {
 			if (!e.getPlayer().isOp()) {
 				e.setCancelled(true);
 			}
 		}
-		
-		/*if (e.getBlock().getType() == Material.ANVIL) {
-		      Arrow drop = dropSeat(e.getBlock());
-
-		      for (Entity em : drop.getNearbyEntities(0.2D, 0.2D, 0.2D)) {
-		        if ((em != null) && (em instanceof Arrow) && (em.getPassenger() != null)) {
-		          em.remove();
-		        }
-		      }
-		      drop.remove();
-		    }*/
 	}
-	
-	/*@EventHandler
-	public void onVehicleLeave(VehicleExitEvent e) {
-	    Entity vehicle = e.getVehicle();
-
-	    if ((vehicle != null) && (vehicle instanceof Arrow))
-	      vehicle.remove();
 		
-	}*/
-	
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent e) {
 		boolean ingame = false;
@@ -568,23 +531,8 @@ public class GameManager implements Listener {
 		}
 	}
 	
-	/*private Arrow dropSeat(Block chair) {
-		Location location = chair.getLocation().add(0.5D, 0.7D - 0.5D, 0.5D);
-		Arrow drop = location.getWorld().spawnArrow(location, new Vector(0, 0, 0), 0, 0);
-		//Item drop = location.getWorld().dropItemNaturally(location, new ItemStack(Material.LEVER));
-		drop.teleport(location);
-		drop.setVelocity(new Vector(0, 0, 0));
-		return drop;
-	}*/
-	
 	@EventHandler
 	public void onPlayerIneract(PlayerInteractEvent e) {
-		/*if (e.hasBlock() && e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getClickedBlock().getType() == Material.ANVIL && (!e.getPlayer().isSneaking())) {
-			e.setCancelled(true);
-			Arrow drop = dropSeat(e.getClickedBlock());
-			
-	          drop.setPassenger(e.getPlayer());
-		}*/
 		for (Game g : games) {
 			if (g.check(e.getPlayer())) {
 				g.onPlayerIneract(e);
@@ -613,9 +561,7 @@ public class GameManager implements Listener {
 			}
 		}
 	}
-	
-	//TO DO block break event, block place event
-	
+		
 	public boolean checkPlayer(Player p) {
 		for (Game g : games) {
 			if (g.check(p)) {

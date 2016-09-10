@@ -3,7 +3,7 @@ package net.yzimroni.buildsomething2.player.achievement;
 public class AchievementInfo {
 
 	private BAchievement achievement;
-	private boolean saved; //To know if we need to insert the achievemnet to the database (only new set to false, once saved set to true,
+	private boolean saved; //To know if we need to insert the achievemnet into the database (only new set to false, once saved set to true,
 	//when load from db automaticlly set to true)
 	private long date;
 	private boolean messageSent = true;

@@ -145,19 +145,6 @@ public class PlayerData {
 		}
 	}
 		
-	/*public static PlayerData create(UUID u, int total, int builder, int normal, int know, int knowfirst, List<Integer> blocks, int allknow) {
-		PlayerData d = new PlayerData();
-		d.setUuid(u);
-		d.setTotalGames(total);
-		d.setBuilder(builder);
-		d.setNormalPlayer(normal);
-		d.setKnow(know);
-		d.setKnowFirst(knowfirst);
-		d.setBlocks(blocks);
-		d.setAllKnow(allknow);
-		return d;
-	}*/
-	
 	public static PlayerData createNew(UUID u) {
 		PlayerData d = new PlayerData();
 		d.setUuid(u);

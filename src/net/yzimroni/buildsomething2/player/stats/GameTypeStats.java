@@ -7,17 +7,6 @@ import net.yzimroni.buildsomething2.game.GameInfo.GameType;
 
 public class GameTypeStats {
 	
-	/*
-	 * How much times their build built in bot game (one for single builders and one for multi builders)
-	 * For each game type (single builder, multi builders, bot game):
-	 * 		Total games (in this game type)
-	 * 		builder (not fot bot game)
-	 * 		normal player
-	 * 		know the word
-	 * 		know the word first
-	 * 		All know
-	 */
-
 	private UUID uuid;
 	private GameType gameType;
 	

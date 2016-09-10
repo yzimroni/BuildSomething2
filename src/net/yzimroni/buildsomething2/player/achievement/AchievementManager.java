@@ -16,37 +16,7 @@ import org.bukkit.event.Listener;
 
 public class AchievementManager implements Listener {
 	
-	/*
-	 * Ways to get achievements:
-	 * 1. callable in every achievement (class to each thing, like BonusAchievement#onBonusUse(BPlayer, Bonus) and PlayerAchievement#onGameEnd(BPlayer, Game))
-	 * then call all the achievements callable if they are the right type
-	 * 
-	 * 2. methods on this class like onBonusUse(BPlayer, Bonus) and check inside the methods for the achievement (if the know if more then X and if the player
-	 * doesn't have the achievement Y, give it to the player)
-	 * 
-	 * 3. raw in the code: in knowTheWord, check if player know the word more then X times, if then give their the achievement X
-	 * 
-	 * I think 2 is the prefered, without alot of new anonymos classes and memory use but no much static and problem to maintance
-	 * And we can do for special achievements, the checking will be in another place
-	 */
-	
-	/*
-	 * Ways to save achievements:
-	 * 1. In an enum class BAchievement
-	 * 2. In a HashMap or a list (with object that contains the name and the decrption) FMCAchievements
-	 */
-	
 	private BuildSomethingPlugin plugin;
-	
-	/*
-	 * TODO
-	 * on command?
-	 * Things on the game classes
-	 * Option to add achievement to an offline player (without loading BPlayer):
-	 * 		Call the db async and check if the player dosen't have the achievement, if so insert it and add a colum to the achievement table "messageSent", 
-	 * 		indicate if the player know he recivied the achievement
-	 */
-	
 	public AchievementManager(BuildSomethingPlugin p) {
 		plugin = p;
 	}

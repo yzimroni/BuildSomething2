@@ -87,15 +87,6 @@ public class SimpleScoreboard {
 		int index = scores.size();
 
 		for (Map.Entry<String, Integer> text : scores.entrySet()) {
-			//System.out.println(text.getKey().length() + ":" + text.getKey());
-			/*Map.Entry<Team, String> team = createTeam(text.getKey());
-			Integer score = text.getValue() != null ? text.getValue() : index;
-			OfflinePlayer player = Bukkit.getOfflinePlayer(team.getValue());
-			if (team.getKey() != null)
-				team.getKey().addPlayer(player);
-			obj.getScore(player).setScore(score);
-			index -= 1;*/
-			
 			Map.Entry<Team, String> team = createTeam(text.getKey());
 			Integer score = text.getValue() != null ? text.getValue() : index;
 			if (team.getKey() != null)

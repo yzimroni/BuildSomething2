@@ -20,7 +20,6 @@ public class LanguageOptions implements Listener {
 	}
 	
 	public boolean haveChooseLang(BPlayer p) {
-		//TO DO first check if the player want to see both langs
 		if (p.isHebrewWords()) {
 			return langs.containsKey(p.getUUID());
 		} else {

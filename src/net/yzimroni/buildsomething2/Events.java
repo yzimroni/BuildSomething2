@@ -55,40 +55,6 @@ public class Events implements Listener {
 	
 	@EventHandler
 	public void cmd(final PlayerCommandPreprocessEvent e) {
-		/*String perm = "worldedit.*";
-		Player p = e.getPlayer();
-		if (e.getMessage().equalsIgnoreCase("/pt1")) {
-			p.sendMessage("=== Start ===");
-			p.sendMessage("" + p.hasPermission(perm));
-			p.sendMessage("adding...");
-			PermissionAttachment a = p.addAttachment(plugin, perm, true);
-			a.setPermission(perm, true);
-			p.recalculatePermissions();
-			p.sendMessage("added");
-		} else if (e.getMessage().equalsIgnoreCase("/pt2")) {
-			p.sendMessage("remoing...");
-			p.addAttachment(plugin, perm, false);
-			p.sendMessage("" + p.hasPermission(perm));
-			p.sendMessage("removed");
-		} else if (e.getMessage().equalsIgnoreCase("/pt3")) {
-			p.sendMessage("Check: " + p.hasPermission(perm));
-			p.recalculatePermissions();
-		}*/
-		/*if (e.getMessage().equalsIgnoreCase("/pt")) {
-			Player p = e.getPlayer();
-			String perm = "bukkit.command.effect";
-			p.sendMessage("=== Start ===");
-			p.sendMessage("" + p.hasPermission(perm));
-			p.sendMessage("adding...");
-			p.addAttachment(plugin, perm, true);
-			p.sendMessage("added");
-			p.sendMessage("" + p.hasPermission(perm));
-			p.sendMessage("remoing...");
-			p.addAttachment(plugin, perm, false);
-			p.sendMessage("" + p.hasPermission(perm));
-			p.sendMessage("removed");
-			
-		}*/
 		if (!e.getPlayer().isOp()) return;
 		if (e.getMessage().equalsIgnoreCase("/fly")) {
 			e.setCancelled(true);
@@ -216,12 +182,6 @@ public class Events implements Listener {
 	
 	@EventHandler
 	public void onPlayerDropItem(PlayerDropItemEvent e) {
-		/*Plot p = PlotMeCoreManager.getInstance().getPlotById("1;1", PlotMeCoreManager.getInstance().getMap("plotworld"));
-		ILocation lm = PlotMeCoreManager.getInstance().getPlotTopLoc(PlotMeCoreManager.getInstance().getFirstWorld(), p.getId());
-		Location l = new Location(e.getPlayer().getWorld(), lm.getX(), lm.getY(), lm.getZ());
-		l.setY(65);
-		Bukkit.broadcastMessage(l.toString());
-		l.getBlock().setType(Material.GLOWSTONE);*/
 		if (!e.getPlayer().isOp()) {
 			e.setCancelled(true);
 		}
@@ -229,7 +189,6 @@ public class Events implements Listener {
 	
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent e) {
-		//e.getPlayer().sendMessage(plugin.hebrewMessage(e.getPlayer(), "מה קורה"));
 		e.setMessage(Utils.uppersLettersFixed(e.getMessage()));
 	}
 	

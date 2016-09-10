@@ -121,8 +121,6 @@ public class Builders {
 	@Override
 	public String toString() {
 		int size = size();
-		/*if (size == 0) {
-		} else*/
 		if (size == 1) {
 			return getPlayers().get(0).getName();
 		} else if (size > 1) {
@@ -141,7 +139,6 @@ public class Builders {
 			}
 			return result;
 		} else {
-			//return "Builders [plugin=" + plugin + ", builders=" + builders + "]";
 			return "No builders";
 		}
 	}

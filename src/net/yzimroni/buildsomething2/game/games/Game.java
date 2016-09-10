@@ -395,7 +395,6 @@ public abstract class Game {
 	}
 	
 	public void messagePlayer(Player p, String s) {
-		//p.sendMessage(s);
 		p.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_BLUE + "BuildSomething" + ChatColor.GREEN + "] " + ChatColor.BLUE + s);
 	}
 	
@@ -618,7 +617,7 @@ public abstract class Game {
 						
 						@Override
 						public void run() {
-							knowTheWord(e.getPlayer()); //Prevent the knowTheWord (and sometime checkEnd and stop) methods to begin call async
+							knowTheWord(e.getPlayer()); //Prevent the knowTheWord (and sometime checkEnd and stop) methods to call async
 							
 						}
 					});

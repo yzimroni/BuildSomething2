@@ -74,7 +74,7 @@ public class PlotManager {
 	}
 	
 	public void pastePlot(Plot plot, int level, WorldEditClipboard clipboard) {
-		//TODO try to work with the new worldedit api
+		//TODO switch to the new worldedit api
 		World world = Bukkit.getWorld(plot.getWorld().getName());
 		com.worldcretornica.plotme_core.api.Vector lm = plot.getPlotTopLoc();
 		Location l = new Location(world, lm.getX(), lm.getY(), lm.getZ());
@@ -135,12 +135,6 @@ public class PlotManager {
 							//TODO need to remove the npc id from the row as well?
 						}
 						return true;
-						/*
-						 * TO DO
-						 * update the plot id, the plot type and the bot request in the game db V
-						 * Get the game db id first V
-						 * Remove the npcs V
-						 */
 					} else {
 						System.out.println("to is null");
 					}
@@ -180,14 +174,6 @@ public class PlotManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		
-		/*
-		 * TO DO 
-		 * remove the content of "to" plot V
-		 * copy the plot from to V
-		 */
-		
 		return true;
 	}
 	

@@ -175,28 +175,7 @@ public class BuildersGame extends Game {
 						}
 					}
 					Utils.sendTitleSub(builder, ChatColor.BLUE + "You and " + other_name + " are the builders!", ChatColor.AQUA + "The word is " + ChatColor.GREEN + word.getWordEnglish() + (bp.isHebrewWords() ? " (" + plugin.hebrewMessage(builder, word.getWordHebrew()) + ")" : ""), (int) (0.5 * 20), 4 * 20, (int) (0.5 * 20));
-				} else {
-					/*String result = "";
-					String last_name = "";
-					for (UUID u : builders.getUUIDs()) {
-						if (!u.equals(builder.getUniqueId())) {
-							String name = Bukkit.getOfflinePlayer(u).getName();
-							if (!last_name.isEmpty()) {
-								if (!result.isEmpty()) {
-									result += ", ";
-								}
-								result += last_name;
-							}
-							last_name = name;
-						}
-					}
-					if (!last_name.isEmpty()) {
-						if (!result.isEmpty()) {
-							result += " and ";
-						}
-						result += last_name;
-					}*/
-					
+				} else {					
 					String result = Utils.formatPlayerList(builders.getUUIDs(), builder.getUniqueId()); //TODO check
 					
 					Utils.sendTitleSub(builder, ChatColor.BLUE + "You, " + result + " are the builders!", ChatColor.AQUA + "The word is " + ChatColor.GREEN + word.getWordEnglish() + (bp.isHebrewWords() ? " (" + plugin.hebrewMessage(builder, word.getWordHebrew()) + ")" : ""), (int) (0.5 * 20), 4 * 20, (int) (0.5 * 20));
@@ -319,17 +298,6 @@ public class BuildersGame extends Game {
 				gameInfo.addPlayer(new PlayerInfo(p.getUniqueId(), builders.isBuilder(p) ? 1 : 0, npcId, knowTime));
 			}
 		}
-		
-		
-		/*
-		 * TO DO
-		 * copy the plot to the plot world VV
-		 * clear the area VV
-		 * remove items frames and drops VV	 - we dont need to do that, players cant place items and cant place itemframes
-		 * set the name tags VV
-		 * effects VV	
-		 */
-		
 		super.stop(force, nodelay);
 	}
 	
@@ -433,8 +401,7 @@ public class BuildersGame extends Game {
 					e.setBuild(false);
 					return;
 				} else {
-					//e.getPlayer().getItemInHand().setAmount(64);
-					e.getItemInHand().setAmount(64); //TODO check if this is acully changes the amount
+					e.getItemInHand().setAmount(64);
 				}
 			} else if (!e.getPlayer().isOp()) {
 				e.setCancelled(true);
@@ -498,7 +465,6 @@ public class BuildersGame extends Game {
 		}
 		super.knowTheWord(p);
 		for (Player builder : builders.getPlayers()) {
-			//TODO
 			rewardCoins(builder, 3, "A player know the word");
 		}
 		checkEnd();

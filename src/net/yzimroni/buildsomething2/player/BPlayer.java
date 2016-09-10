@@ -229,7 +229,6 @@ public class BPlayer {
 						count++;
 						i.setSaved(true);
 					}
-					//Bukkit.broadcastMessage(achievementSQL.toString()); TODO
 
 					achievementSQL.executeUpdate();
 

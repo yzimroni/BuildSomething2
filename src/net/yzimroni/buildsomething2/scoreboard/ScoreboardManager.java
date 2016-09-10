@@ -59,15 +59,6 @@ public class ScoreboardManager {
 		t.setPrefix(ChatColor.RED + "");
 		t.setSuffix(ChatColor.RESET + "");
 		
-		/*TODO maybe other way (maybe hashmap with uuid and the name of the team [or permissions], 
-		 * and when a player connect add them to the group they should be in)
-		 * 
-		 * I think to do this using permission, but need to think about how to do this
-		*/
-		
-		t.addPlayer(Bukkit.getOfflinePlayer(UUID.fromString("341899b6-b28f-47a3-b85e-3aa3b491d0d3")));
-		t.addPlayer(Bukkit.getOfflinePlayer(UUID.fromString("860d3119-ea5a-490b-9bf4-29b581164eca")));
-		t.addPlayer(Bukkit.getOfflinePlayer(UUID.fromString("696de9c6-96af-47a7-b934-96e6e2853817")));
 	}
 	
 	public SimpleScoreboard createGameScoreboard(Game g) {
