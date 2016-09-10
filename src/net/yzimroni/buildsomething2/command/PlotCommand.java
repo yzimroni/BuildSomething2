@@ -65,9 +65,8 @@ public class PlotCommand {
 		Command plot = new Command("plot", "Plot command", new CommandExecutor() {
 			
 			@Override
-			public boolean executeCommand(CommandSender sender, Command command, ArgumentData args) {
+			public void executeCommand(CommandSender sender, Command command, ArgumentData args) {
 				command.printHelp(sender, 1);
-				return true;
 			}
 		});
 		
@@ -78,9 +77,8 @@ public class PlotCommand {
 		SubCommand admin = new SubCommand("admin", "Plot admin commands", new CommandExecutor() {
 			
 			@Override
-			public boolean executeCommand(CommandSender sender, Command command, ArgumentData args) {
+			public void executeCommand(CommandSender sender, Command command, ArgumentData args) {
 				command.printHelp(sender, -1);
-				return false;
 			}
 		});
 		

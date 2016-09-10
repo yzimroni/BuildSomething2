@@ -35,17 +35,16 @@ public class MoneyCommand {
 	}
 	
 	@MethodId("money")
-	public boolean moneyCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void moneyCommand(CommandSender sender, Command command, ArgumentData args) {
 		if (sender instanceof Player) {
 			sender.sendMessage("You have " + plugin.getPlayerManager().getEconomy().getBalance(((Player) sender).getUniqueId()) + "$");
 		} else {
 			sender.sendMessage("Only players can do this");
 		}
-		return true;
 	}
 
 	@MethodId("view")
-	public boolean viewCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void viewCommand(CommandSender sender, Command command, ArgumentData args) {
 		if (sender instanceof ConsoleCommandSender || ((Player) sender).isOp()) {
 			String name = args.get("player", String.class);
 			OfflinePlayer o = Utils.getOfflinePlayer(name);
@@ -55,7 +54,6 @@ public class MoneyCommand {
 				sender.sendMessage("The player " + name + " not found");
 			}
 		}
-		return true;
 	}
 
 }

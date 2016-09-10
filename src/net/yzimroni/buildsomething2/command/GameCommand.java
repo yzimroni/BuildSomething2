@@ -178,18 +178,17 @@ public class GameCommand {
 	}
 
 	@MethodId("main")
-	public boolean mainCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void mainCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getSenderData(sender);
 		if (data.getGame() != null) {
 			sender.sendMessage("Game selected: " + plugin.getGameManager().getGames().indexOf(data.getGame()));
 			sender.sendMessage("");
 		}
 		command.printHelp(sender, -1);
-		return true;
 	}
 
 	@MethodId("games")
-	public boolean gamesCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void gamesCommand(CommandSender sender, Command command, ArgumentData args) {
 		if (plugin.getGameManager().getGames().isEmpty()) {
 			sender.sendMessage("There is no games open right now :(");
 		} else {
@@ -201,15 +200,14 @@ public class GameCommand {
 					BuildersGame bs = (BuildersGame) g;
 					builders = (!bs.getBuilders().isEmpty() ? " | " + bs.getBuilders() : "");
 				}
-				sender.sendMessage("" + index + " | " + g.getGameType() + " | " + g.getMap().getName() + " | " + g.getMode() + " | "
-					+ g.getPlayers().size() + "/" + g.getMaxPlayers() + builders);
+				sender.sendMessage("" + index + " | " + g.getGameType() + " | " + g.getMap().getName() + " | "
+						+ g.getMode() + " | " + g.getPlayers().size() + "/" + g.getMaxPlayers() + builders);
 			}
 		}
-		return true;
 	}
 
 	@MethodId("select")
-	public boolean selectCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void selectCommand(CommandSender sender, Command command, ArgumentData args) {
 		int id = args.get("gameId", Integer.class);
 		Game g = null;
 		try {
@@ -225,14 +223,13 @@ public class GameCommand {
 			selects.put(u, g.getId());
 			sender.sendMessage("Choose game number " + id);
 		}
-		return true;
 	}
 
 	@MethodId("start")
-	public boolean startCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void startCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 
@@ -244,14 +241,13 @@ public class GameCommand {
 			sender.sendMessage("Cant start the game");
 		}
 
-		return true;
 	}
 
 	@MethodId("stop")
-	public boolean stopCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void stopCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 
@@ -262,14 +258,13 @@ public class GameCommand {
 			sender.sendMessage("The game not running");
 		}
 
-		return true;
 	}
 
 	@MethodId("word")
-	public boolean wordCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void wordCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 
@@ -282,14 +277,13 @@ public class GameCommand {
 		} else {
 			sender.sendMessage("The word is not set");
 		}
-		return true;
 	}
-	
+
 	@MethodId("wordSet")
-	public boolean wordSetCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void wordSetCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 		if (g instanceof BuildersGame) {
@@ -307,39 +301,36 @@ public class GameCommand {
 		} else {
 			sender.sendMessage("You can set the game word only on builder-game");
 		}
-		return true;
 	}
 
-
 	@MethodId("builder")
-	public boolean builderCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void builderCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 
 		if (!(g instanceof BuildersGame)) {
 			sender.sendMessage("This is not builders game!");
-			return false;
+			return;
 		}
 
 		BuildersGame bs = (BuildersGame) g;
 		sender.sendMessage("Builders (" + bs.getBuildersCount() + "): " + bs.getBuilders().toString());
-		return true;
 	}
 
 	@MethodId("builderAdd")
-	public boolean builderAddCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void builderAddCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 
 		if (!(g instanceof BuildersGame)) {
 			sender.sendMessage("This is not builders game!");
-			return false;
+			return;
 		}
 
 		BuildersGame bs = (BuildersGame) g;
@@ -352,20 +343,19 @@ public class GameCommand {
 			sender.sendMessage("Cant set builders now");
 		}
 
-		return true;
 	}
 
 	@MethodId("builderRemove")
-	public boolean builderRemoveCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void builderRemoveCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 
 		if (!(g instanceof BuildersGame)) {
 			sender.sendMessage("This is not builders game!");
-			return false;
+			return;
 		}
 
 		BuildersGame bs = (BuildersGame) g;
@@ -375,28 +365,27 @@ public class GameCommand {
 
 			if (!bs.getBuilders().isBuilder(p)) {
 				sender.sendMessage(p.getName() + " is not a builder in this game");
-				return false;
+				return;
 			}
 			bs.getBuilders().removeBuilder(p);
 			sender.sendMessage("You removed " + p.getName() + " from the builders of the game");
 		} else {
 			sender.sendMessage("Cant set builders now");
 		}
-		return true;
 
 	}
 
 	@MethodId("builderReset")
-	public boolean builderResetCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void builderResetCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 
 		if (!(g instanceof BuildersGame)) {
 			sender.sendMessage("This is not builders game!");
-			return false;
+			return;
 		}
 
 		BuildersGame bs = (BuildersGame) g;
@@ -408,14 +397,13 @@ public class GameCommand {
 			sender.sendMessage("Cant set builders now");
 		}
 
-		return true;
 	}
 
 	@MethodId("info")
-	public boolean infoCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void infoCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 
@@ -448,61 +436,58 @@ public class GameCommand {
 		}
 		sender.sendMessage("Know the word: " + g.getKnows().size());
 		sender.sendMessage("Force start: " + g.isForceStart());
-		return true;
 
 	}
 
 	@MethodId("join")
-	public boolean joinCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void joinCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 
 		Player p = args.get("player", Player.class);
 		if (p == null) {
 			sender.sendMessage("invalid player");
-			return false;
+			return;
 		}
 		if (g.check(p)) {
 			sender.sendMessage(p.getName() + " is already in the game");
-			return false;
+			return;
 		}
 		if (plugin.getGameManager().joinGame(g, p)) {
 			sender.sendMessage("Joined " + p.getName() + " to the game!");
 		} else {
 			sender.sendMessage("Game already started");
 		}
-		return true;
 
 	}
 
 	@MethodId("leave")
-	public boolean leaveCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void leaveCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 
 		Player p = args.get("player", Player.class);
 		if (p == null) {
 			sender.sendMessage("invalid player");
-			return false;
+			return;
 		}
 		if (!g.check(p)) {
 			sender.sendMessage(p.getName() + " is not in the game");
-			return false;
+			return;
 		}
 		g.removePlayer(p);
 		sender.sendMessage(p.getName() + " Removed from the game");
-		return true;
 
 	}
 
 	@MethodId("openGames")
-	public boolean openGamesCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void openGamesCommand(CommandSender sender, Command command, ArgumentData args) {
 		if (args.has("value")) {
 			boolean open = args.get("value", Boolean.class);
 			plugin.getGameManager().setOpenNewGames(open);
@@ -519,39 +504,40 @@ public class GameCommand {
 			sender.sendMessage("Determine if new games will create and start");
 			sender.sendMessage("Current: " + plugin.getGameManager().isOpenNewGames());
 		}
-		return true;
+		return;
 	}
 
 	@MethodId("close")
-	public boolean closeCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void closeCommand(CommandSender sender, Command command, ArgumentData args) {
 		if (args.hasFlag("flags", "all")) {
 			plugin.getGameManager().closeAll();
 			sender.sendMessage("You closed all the games.");
 		} else {
 			CommandSenderData data = getCheckSenderData(sender);
 			if (data == null) {
-				return false;
+				return;
 			}
 			Game g = data.getGame();
 
 			g.close();
 			sender.sendMessage("You closed the game.");
 		}
-		return true;
 
 	}
+
 	@MethodId("maxPlayers")
-	public boolean maxPlayersCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void maxPlayersCommand(CommandSender sender, Command command, ArgumentData args) {
 		boolean all = args.hasFlag("flags", "all");
 		if (args.has("value")) {
 			int max = args.get("value", Integer.class);
 			if (all) {
 				plugin.getGameManager().setMaxPlayers(max);
-				sender.sendMessage("You set the max players of all the games to " + plugin.getGameManager().getMaxPlayers());
+				sender.sendMessage(
+						"You set the max players of all the games to " + plugin.getGameManager().getMaxPlayers());
 			} else {
 				CommandSenderData data = getCheckSenderData(sender);
 				if (data == null) {
-					return false;
+					return;
 				}
 				data.getGame().setMaxPlayers(max);
 				sender.sendMessage("You set the max players of the game to " + data.getGame().getMaxPlayers());
@@ -563,44 +549,41 @@ public class GameCommand {
 			}
 			sender.sendMessage("The global max players is " + plugin.getGameManager().getMaxPlayers());
 		}
-		return true;
 	}
-	
+
 	@MethodId("time")
-	public boolean timeCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void timeCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 		sender.sendMessage("Game time: " + Utils.timeString(g.getTime()));
-		return true;
 	}
-	
+
 	@MethodId("timeSet")
-	public boolean timeSetCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void timeSetCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 		int time = args.get("time", Integer.class);
 		g.setTime(time);
-		sender.sendMessage("Added " + Utils.timeString(time) + " to the game, the time of the game now: " + Utils.timeString(g.getTime()));
-		return true;
+		sender.sendMessage("Added " + Utils.timeString(time) + " to the game, the time of the game now: "
+				+ Utils.timeString(g.getTime()));
 	}
-	
+
 	@MethodId("timeAdd")
-	public boolean timeAddCommand(CommandSender sender, Command command, ArgumentData args) {
+	public void timeAddCommand(CommandSender sender, Command command, ArgumentData args) {
 		CommandSenderData data = getCheckSenderData(sender);
 		if (data == null) {
-			return false;
+			return;
 		}
 		Game g = data.getGame();
 		int time = args.get("time", Integer.class);
 		g.addTime(time);
 		sender.sendMessage("Set the game time to " + Utils.timeString(time) + "");
-		return true;
 	}
 
 }
