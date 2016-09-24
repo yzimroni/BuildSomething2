@@ -10,21 +10,22 @@ import net.yzimroni.buildsomething2.game.games.BuildersGame;
 import net.yzimroni.buildsomething2.game.games.Game;
 import net.yzimroni.buildsomething2.utils.Utils;
 import net.yzimroni.commandmanager.command.Command;
-import net.yzimroni.commandmanager.command.MethodExecutor;
 import net.yzimroni.commandmanager.command.SubCommand;
 import net.yzimroni.commandmanager.command.args.ArgumentData;
 import net.yzimroni.commandmanager.command.args.arguments.BooleanArgument;
 import net.yzimroni.commandmanager.command.args.arguments.FlagsArgument;
 import net.yzimroni.commandmanager.command.args.arguments.IntegerArgument;
 import net.yzimroni.commandmanager.command.args.arguments.PlayerArgument;
+import net.yzimroni.commandmanager.command.methodexecutor.MethodExecutor;
+import net.yzimroni.commandmanager.command.methodexecutor.MethodExecutorClass;
+import net.yzimroni.commandmanager.command.methodexecutor.MethodId;
 import net.yzimroni.commandmanager.manager.CommandManager;
-import net.yzimroni.commandmanager.utils.MethodId;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class GameCommand {
+public class GameCommand implements MethodExecutorClass {
 	private BuildSomethingPlugin plugin;
 	private final UUID CONSOLE_UUID = UUID.randomUUID();
 	private HashMap<UUID, UUID> selects;

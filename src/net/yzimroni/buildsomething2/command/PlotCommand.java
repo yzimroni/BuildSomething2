@@ -23,14 +23,15 @@ import net.yzimroni.buildsomething2.utils.JsonBuilder.HoverAction;
 import net.yzimroni.commandmanager.command.Command;
 import net.yzimroni.commandmanager.command.CommandExecutor;
 import net.yzimroni.commandmanager.command.CommandValidator;
-import net.yzimroni.commandmanager.command.MethodExecutor;
 import net.yzimroni.commandmanager.command.SubCommand;
 import net.yzimroni.commandmanager.command.args.ArgumentData;
 import net.yzimroni.commandmanager.command.args.ArgumentValidCheck;
 import net.yzimroni.commandmanager.command.args.arguments.IntegerArgument;
+import net.yzimroni.commandmanager.command.methodexecutor.MethodExecutor;
+import net.yzimroni.commandmanager.command.methodexecutor.MethodExecutorClass;
 import net.yzimroni.commandmanager.manager.CommandManager;
 
-public class PlotCommand {
+public class PlotCommand implements MethodExecutorClass {
 	
 	private BuildSomethingPlugin plugin;
 	private HashMap<Integer, String> cache = new HashMap<Integer, String>();

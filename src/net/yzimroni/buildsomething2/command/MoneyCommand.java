@@ -8,14 +8,15 @@ import org.bukkit.entity.Player;
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.utils.Utils;
 import net.yzimroni.commandmanager.command.Command;
-import net.yzimroni.commandmanager.command.MethodExecutor;
 import net.yzimroni.commandmanager.command.SubCommand;
 import net.yzimroni.commandmanager.command.args.ArgumentData;
 import net.yzimroni.commandmanager.command.args.arguments.StringArgument;
+import net.yzimroni.commandmanager.command.methodexecutor.MethodExecutor;
+import net.yzimroni.commandmanager.command.methodexecutor.MethodExecutorClass;
+import net.yzimroni.commandmanager.command.methodexecutor.MethodId;
 import net.yzimroni.commandmanager.manager.CommandManager;
-import net.yzimroni.commandmanager.utils.MethodId;
 
-public class MoneyCommand {
+public class MoneyCommand implements MethodExecutorClass {
 	private BuildSomethingPlugin plugin;
 	
 	public MoneyCommand(BuildSomethingPlugin p) {
