@@ -1,10 +1,12 @@
 package net.yzimroni.buildsomething2.player;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.GameInfo.GameType;
@@ -35,7 +37,9 @@ public class PlayerData {
 	
 	public static PlayerData load(BuildSomethingPlugin p, UUID u) {
 		try {
-			ResultSet rs = p.getDB().get("SELECT * FROM players WHERE UUID='" + u.toString() + "'");
+			PreparedStatement pre = p.getDB().getPrepare("SELECT * FROM players WHERE UUID=?");
+			pre.setString(1, u.toString());
+			ResultSet rs = pre.executeQuery();
 			rs.first();
 			return loadRS(u, rs, p);
 		} catch (Exception e) {
@@ -63,14 +67,18 @@ public class PlayerData {
 	
 	private void loadStats() {
 		try {
-			ResultSet rs = getPlugin().getDB().get("SELECT * FROM playerstats WHERE UUID='" + uuid.toString() + "'");
+			PreparedStatement pre = getPlugin().getDB().getPrepare("SELECT * FROM playerstats WHERE UUID=?");
+			pre.setString(1, uuid.toString());
+			ResultSet rs = pre.executeQuery();
 			while (rs.next()) {
 				GameType type = GameType.getById(rs.getInt("gameType"));
 				GameTypeStats gamestats = new GameTypeStats(uuid, type);
 				gamestats.load(rs);
 				stats.put(type, gamestats);
-				
+			
 			}
+			rs.close();
+			pre.close();
 			initGlobalStats();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,10 +91,14 @@ public class PlayerData {
 	
 	private void loadBlocks() {
 		try {
-			ResultSet rs = getPlugin().getDB().get("SELECT * FROM playerblocks WHERE UUID='" + uuid.toString() + "'");
+			PreparedStatement pre = getPlugin().getDB().getPrepare("SELECT * FROM playerblocks WHERE UUID=?");
+			pre.setString(1, uuid.toString());
+			ResultSet rs = pre.executeQuery();
 			while (rs.next()) {
 				blocks.add(rs.getInt("block_id"));
 			}
+			rs.close();
+			pre.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -94,10 +106,14 @@ public class PlayerData {
 	
 	private void loadBonuses() {
 		try {
-			ResultSet rs = getPlugin().getDB().get("SELECT * FROM playerbonuses WHERE UUID='" + uuid.toString() + "'");
+			PreparedStatement pre = getPlugin().getDB().getPrepare("SELECT * FROM playerbonuses WHERE UUID=?");
+			pre.setString(1, uuid.toString());
+			ResultSet rs = pre.executeQuery();
 			while (rs.next()) {
 				bonuses.put(rs.getInt("bonuseid"), rs.getInt("amount"));
 			}
+			rs.close();
+			pre.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -105,28 +121,42 @@ public class PlayerData {
 	
 	private void loadEffects() {
 		try {
-			ResultSet rs = getPlugin().getDB().get("SELECT * FROM playereffects WHERE UUID='" + uuid.toString() + "'");
+			PreparedStatement pre = getPlugin().getDB().getPrepare("SELECT * FROM playereffects WHERE UUID=?");
+			pre.setString(1, uuid.toString());
+			ResultSet rs = pre.executeQuery();
 			while (rs.next()) {
 				effects.add(rs.getInt("effect_id"));
 			}
+			rs.close();
+			pre.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		try {
-			ResultSet rs = getPlugin().getDB().get("SELECT * FROM playereffectschoose WHERE UUID='" + uuid.toString() + "'");
+			PreparedStatement pre = getPlugin().getDB().getPrepare("SELECT * FROM playereffectschoose WHERE UUID=?");
+			pre.setString(1, uuid.toString());
+			ResultSet rs = pre.executeQuery();
+
 			while (rs.next()) {
 				views_effects.put(rs.getInt("view_id"), rs.getInt("effect_id"));
 			}
+			rs.close();
+			pre.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		try {
-			ResultSet rs = getPlugin().getDB().get("SELECT * FROM playereffectviews WHERE UUID='" + uuid.toString() + "'");
+			PreparedStatement pre = getPlugin().getDB().getPrepare("SELECT * FROM playereffectviews WHERE UUID=?");
+			pre.setString(1, uuid.toString());
+			ResultSet rs = pre.executeQuery();
+
 			while (rs.next()) {
 				views.add(rs.getInt("view_id"));
 			}
+			rs.close();
+			pre.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -134,12 +164,17 @@ public class PlayerData {
 	
 	private void loadAchievement() {
 		try {
-			ResultSet rs = getPlugin().getDB().get("SELECT * FROM achievements WHERE UUID='" + uuid.toString() + "'");
+			PreparedStatement pre = getPlugin().getDB().getPrepare("SELECT * FROM achievements WHERE UUID=?");
+			pre.setString(1, uuid.toString());
+			ResultSet rs = pre.executeQuery();
+
 			while (rs.next()) {
 				AchievementInfo info = new AchievementInfo(BAchievement.valueOf(rs.getString("achievement")), true, rs.getLong("date"));
 				info.setMessageSent(rs.getBoolean("messageSent"));
 				achievements.add(info);
 			}
+			rs.close();
+			pre.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -176,14 +211,7 @@ public class PlayerData {
 	}
 	
 	public List<GameTypeStats> getUpdatedStats() {
-		//TODO check that it is add all the updated stats
-		List<GameTypeStats> updated = new ArrayList<GameTypeStats>();
-		for (GameTypeStats stat : stats.values()) {
-			if (stat.isUpdated()) {
-				updated.add(stat);
-			}
-		}
-		return updated;
+		return stats.values().stream().filter(GameTypeStats::isUpdated).collect(Collectors.toList());
 	}
 
 	public int getBonus(int id) {

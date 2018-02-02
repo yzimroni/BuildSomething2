@@ -4,7 +4,7 @@
  * WorldEdit bonuses:
  * getMaxAmount = 1
  * takeBonus do nothing
- * canBuy return true if the player have the privius bonus
+ * canBuy return true if the player have the previous bonus
  * isBuyable = true
  * 
  * Bonuses:

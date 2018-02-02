@@ -1,6 +1,8 @@
 package net.yzimroni.buildsomething2.player.economy;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -42,12 +44,13 @@ public class Economy implements Listener {
 	
 	public void onDisable() {
 		saveAll();
-		money.clear();
 	}
 	
 	public boolean hasAccount(UUID u) {
 		try {
-			ResultSet rs = plugin.getDB().get("SELECT * FROM economy WHERE UUID='" + u.toString() + "'");			
+			PreparedStatement pre = plugin.getDB().getPrepare("SELECT * FROM economy WHERE UUID=?");
+			pre.setString(1, u.toString());
+			ResultSet rs = pre.executeQuery();
 			return rs.first();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,7 +59,14 @@ public class Economy implements Listener {
 	}
 	
 	public void createAccount(UUID u) {
-		plugin.getDB().set("INSERT INTO economy (UUID) VALUES('" + u.toString() + "')");
+		PreparedStatement pre = plugin.getDB().getPrepare("INSERT INTO economy (UUID) VALUES(?)");
+		try {
+			pre.setString(1, u.toString());
+			pre.executeUpdate();
+			pre.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public double getBalance(UUID u) {
@@ -71,12 +81,24 @@ public class Economy implements Listener {
 	}
 	
 	public double getBotCoins(UUID u, boolean delete) {
-		ResultSet rs = plugin.getDB().get("SELECT * FROM bot_coins WHERE UUID='" + u + "'");
+		PreparedStatement pre = plugin.getDB().getPrepare("SELECT * FROM bot_coins WHERE UUID=?");
+		ResultSet rs = null;
+		try {
+			pre.setString(1, u.toString());
+			rs = pre.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		try {
 			if (rs.next()) {
 				final double coins = rs.getDouble("coins");
+				rs.close();
+				pre.close();
 				if (delete) {
-					plugin.getDB().set("DELETE FROM bot_coins WHERE UUID='" + u + "'");
+					PreparedStatement delPre = plugin.getDB().getPrepare("DELETE FROM bot_coins WHERE UUID=?");
+					delPre.setString(1, u.toString());
+					delPre.executeUpdate();
+					delPre.close();
 				}
 				return coins;
 			}
@@ -93,7 +115,16 @@ public class Economy implements Listener {
 			depositPlayer(p.getUniqueId(), coins);
 			p.sendMessage(ChatColor.GREEN + "You received " + ChatColor.YELLOW + coins + " coins" + ChatColor.GREEN + " From bot builds");
 		} else {
-			plugin.getDB().set("INSERT INTO bot_coins (UUID,coins) VALUES ('" + u + "','" + coins + "') ON DUPLICATE KEY UPDATE coins += '" + coins + "'");
+			PreparedStatement pre = plugin.getDB().getPrepare("INSERT INTO bot_coins (UUID,coins) VALUES (?,?) ON DUPLICATE KEY UPDATE coins += ?");
+			try {
+				pre.setString(1, u.toString());
+				pre.setDouble(2, coins);
+				pre.setDouble(3, coins);
+				pre.executeUpdate();
+				pre.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -124,29 +155,38 @@ public class Economy implements Listener {
 	public void remove(UUID u) {
 		if (money.containsKey(u)) {
 			save(u);
-			//plugin.getDB().set("UPDATE economy SET amount='" + money.get(u) + "' WHERE UUID='" + u.toString() + "'");
 			money.remove(u);
-			//TO DO
 		}
 	}
 	
 	private void save(UUID u) {
-		plugin.getDB().set("UPDATE economy SET amount='" + money.get(u) + "' WHERE UUID='" + u.toString() + "'");
+		PreparedStatement pre = plugin.getDB().getPrepare("UPDATE economy SET amount=? WHERE UUID=?");
+		try {
+			pre.setDouble(1, money.get(u));
+			pre.setString(2, u.toString());
+			pre.executeUpdate();
+			pre.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private double load(UUID u) {
 		if (money.containsKey(u)) return money.get(u);
 		try {
-			ResultSet rs = plugin.getDB().get("SELECT * FROM economy WHERE UUID='" + u.toString() + "'");
+			PreparedStatement pre = plugin.getDB().getPrepare("SELECT * FROM economy WHERE UUID=?");
+			pre.setString(1, u.toString());
+			ResultSet rs = pre.executeQuery();
 			if (rs.first()) {
 				money.put(u, rs.getDouble("amount"));
 			} else {
 				throw new IllegalArgumentException("Economy account not found for player " + u.toString());
 			}
+			pre.close();
+			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return money.get(u);
-		//TO DO
 	}
 }

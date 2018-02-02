@@ -1,5 +1,10 @@
 package net.yzimroni.buildsomething2.game.bonuses.bonuses;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.Gamemode;
 import net.yzimroni.buildsomething2.game.bonuses.BonusUser;
@@ -8,11 +13,6 @@ import net.yzimroni.buildsomething2.game.games.Game;
 import net.yzimroni.buildsomething2.player.BPlayer;
 import net.yzimroni.buildsomething2.utils.MaterialData;
 import net.yzimroni.buildsomething2.utils.Utils;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
 public class ChangeWord extends Bonus {
 

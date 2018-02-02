@@ -2,17 +2,17 @@ package net.yzimroni.buildsomething2.player;
 
 import java.sql.PreparedStatement;
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.player.achievement.AchievementInfo;
 import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 public class BPlayer {
 	
@@ -27,10 +27,20 @@ public class BPlayer {
 	private boolean hebrewWords;
 	
 	
+	public BPlayer(UUID uuid, long firstLogin, long playTime, long lastLogin) {
+		super();
+		this.uuid = uuid;
+		this.firstLogin = firstLogin;
+		this.playTime = playTime;
+		this.lastLogin = lastLogin;
+	}
+
+	
 	
 	public Player getPlayer() {
 		return Bukkit.getPlayer(uuid);
 	}
+
 
 	/**
 	 * @return the uuid
@@ -96,7 +106,7 @@ public class BPlayer {
 		long cpt = (System.currentTimeMillis() / 1000) - (lastLogin / 1000);
 		playTime += cpt;
 		PreparedStatement ps = p.getDB().getPrepare("UPDATE players SET Name=?,hotbar_items=?," +
-				"playTime=?,lastLogin=?,lastIp=?,loginTimes=?,hebrewWords=? WHERE UUID='" + uuid.toString() + "'");
+				"playTime=?,lastLogin=?,lastIp=?,loginTimes=?,hebrewWords=? WHERE UUID=?");
 		try {
 			ps.setString(1, getPlayer().getName());
 			if (data.getHotbarItems() == null || data.getHotbarItems().isEmpty()) {
@@ -109,137 +119,93 @@ public class BPlayer {
 			ps.setString(5, lastIp);
 			ps.setInt(6, loginTimes);
 			ps.setBoolean(7, hebrewWords);
+			ps.setString(8, uuid.toString());
 			ps.execute();
 			
 			
 			lastLogin = System.currentTimeMillis();
 			if (!data.getNewBlocks().isEmpty()) {
-				String s = "INSERT INTO playerblocks (UUID,block_id) ";
-				boolean value = false;
+				PreparedStatement pre = p.getDB().getPrepare("INSERT INTO playerblocks (UUID,block_id) VALUES(?,?)");
 				for (int id : data.getNewBlocks()) {
-					if (!value) {
-						s += "VALUES";
-					} else {
-						s += ",";
-					}
-					
-					s += "('" + uuid.toString() + "','" + id + "')";
-					
-					if (!value) {
-						value = true;
-					}
+					pre.clearParameters();
+					pre.setString(1, uuid.toString());
+					pre.setInt(2, id);
+					pre.executeUpdate();
 				}
-				p.getDB().set(s);
+				pre.close();
 				data.getNewBlocks().clear();
 			}
 			
-			for (Entry<Integer, Integer>  s : data.bonuses.entrySet()) {
-				try {
-					PreparedStatement psb = p.getDB().getPrepare("INSERT INTO playerbonuses (UUID,bonuseid,amount) VALUES (?,?,?) ON DUPLICATE KEY UPDATE amount = ?");
-					psb.setString(1, uuid.toString());
-					psb.setInt(2, s.getKey());
-					psb.setInt(3, s.getValue());
-					psb.setInt(4, s.getValue());
-					psb.executeUpdate();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			PreparedStatement bonusesPre = p.getDB().getPrepare("INSERT INTO playerbonuses (UUID,bonuseid,amount) VALUES (?,?,?) ON DUPLICATE KEY UPDATE amount = ?");
+			for (Entry<Integer, Integer> s : data.bonuses.entrySet()) {
+				bonusesPre.clearParameters();
+				bonusesPre.setString(1, uuid.toString());
+				bonusesPre.setInt(2, s.getKey());
+				bonusesPre.setInt(3, s.getValue());
+				bonusesPre.setInt(4, s.getValue());
+				bonusesPre.executeUpdate();
 			}
+			bonusesPre.close();
 			
 			if (!data.getNewEffects().isEmpty()) {
-				String s = "INSERT INTO playereffects (UUID,effect_id) ";
-				boolean value = false;
+				PreparedStatement pre = p.getDB().getPrepare("INSERT INTO playereffects (UUID,effect_id) VALUES(?,?)");
 				for (int id : data.getNewEffects()) {
-					if (!value) {
-						s += "VALUES";
-					} else {
-						s += ",";
-					}
-					
-					s += "('" + uuid.toString() + "','" + id + "')";
-					
-					if (!value) {
-						value = true;
-					}
+					pre.clearParameters();
+					pre.setString(1, uuid.toString());
+					pre.setInt(2, id);
+					pre.executeUpdate();
 				}
-				p.getDB().set(s);
+				pre.close();
 				data.getNewEffects().clear();
-			
 			}
 			
-			for (Entry<Integer, Integer>  s : data.views_effects.entrySet()) {
-				try {
-					PreparedStatement psb = p.getDB().getPrepare("INSERT INTO playereffectschoose (UUID,view_id,effect_id) VALUES (?,?,?) ON DUPLICATE KEY UPDATE effect_id = ?");
-					psb.setString(1, uuid.toString());
-					psb.setInt(2, s.getKey());
-					psb.setInt(3, s.getValue());
-					psb.setInt(4, s.getValue());
-					psb.executeUpdate();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+			PreparedStatement viewEffectsPre = p.getDB().getPrepare("INSERT INTO playereffectschoose (UUID,view_id,effect_id) VALUES (?,?,?) ON DUPLICATE KEY UPDATE effect_id = ?");
+			for (Entry<Integer, Integer> s : data.views_effects.entrySet()) {
+				viewEffectsPre.clearParameters();
+				viewEffectsPre.setString(1, uuid.toString());
+				viewEffectsPre.setInt(2, s.getKey());
+				viewEffectsPre.setInt(3, s.getValue());
+				viewEffectsPre.setInt(4, s.getValue());
+				viewEffectsPre.executeUpdate();
 			}
+			viewEffectsPre.close();
 			
 			if (!data.getNewViews().isEmpty()) {
-				String s = "INSERT INTO playereffectviews (UUID,view_id) ";
-				boolean value = false;
+				PreparedStatement pre = p.getDB().getPrepare("INSERT INTO playereffectviews (UUID,view_id) VALUES(?,?)");
 				for (int id : data.getNewViews()) {
-					if (!value) {
-						s += "VALUES";
-					} else {
-						s += ",";
-					}
-					
-					s += "('" + uuid.toString() + "','" + id + "')";
-					
-					if (!value) {
-						value = true;
-					}
+					pre.clearParameters();
+					pre.setString(1, uuid.toString());
+					pre.setInt(2, id);
+					pre.executeUpdate();
 				}
-				p.getDB().set(s);
+				pre.close();
 				data.getNewViews().clear();
 			}
 			
 			if (!getData().getAchievements().isEmpty()) {
-				List<AchievementInfo> achievementNew = new ArrayList<AchievementInfo>();
-				for (AchievementInfo info : getData().getAchievements()) {
-					if (!info.hasSaved()) {
-						achievementNew.add(info);
-					}
-				}
+				List<AchievementInfo> achievementNew = getData().getAchievements().stream().filter(a -> !a.hasSaved()).collect(Collectors.toList());
 
 				if (!achievementNew.isEmpty()) {
 					System.out.println("saving achievemnts: " + achievementNew);
-					String query = "INSERT INTO achievement (UUID,achievement,date) values ";
-					String querydata = "";
-					for (int i = 0; i < achievementNew.size(); i++) {
-						if (!querydata.isEmpty()) {
-							querydata += ",";
-						}
-						querydata += "(?,?,?)";
-					}
-					PreparedStatement achievementSQL = p.getDB().getPrepare(query + querydata);
-					int count = 1;
+					PreparedStatement pre = p.getDB().getPrepare("INSERT INTO achievement (UUID,achievement,date) VALUES (?,?,?)");
 					for (AchievementInfo i : achievementNew) {
-						achievementSQL.setString(count, uuid.toString());
-						count++;
-						achievementSQL.setString(count, i.getAchievement().name());
-						count++;
-						achievementSQL.setLong(count, i.getDate());
-						count++;
+						pre.clearParameters();
+						pre.setString(1, uuid.toString());
+						pre.setString(2, i.getAchievement().name());
+						pre.setLong(3, i.getDate());
 						i.setSaved(true);
+						pre.executeUpdate();
 					}
-
-					achievementSQL.executeUpdate();
-
+					pre.close();
 				}
 			}
 			
 			List<GameTypeStats> updated = data.getUpdatedStats();
 			if (!updated.isEmpty()) {
+				PreparedStatement psb = p.getDB().getPrepare("INSERT INTO playerstats (UUID,gameType,totalGames,builder,normal,know,knowFirst,allKnow) VALUES (?,?,?,?,?,?,?,?) " +
+				"ON DUPLICATE KEY UPDATE totalGames=?,builder=?,normal=?,know=?,knowFirst=?,allKnow=?");
 				for (GameTypeStats stat : updated) {
-					PreparedStatement psb = p.getDB().getPrepare("INSERT INTO playerstats (UUID,gameType,totalGames,builder,normal,know,knowFirst,allKnow) VALUES (?,?,?,?,?,?,?,?) " +
-					"ON DUPLICATE KEY UPDATE totalGames=?,builder=?,normal=?,know=?,knowFirst=?,allKnow=?");
+					psb.clearParameters();
 					psb.setString(1, uuid.toString());
 					psb.setInt(2, stat.getGameType().getId());
 					int index = 3;
@@ -265,6 +231,7 @@ public class BPlayer {
 					psb.executeUpdate();
 					stat.setUpdated(false);
 				}
+				psb.close();
 			}
 			
 		} catch (Exception e) {
@@ -296,7 +263,7 @@ public class BPlayer {
 	}
 	
 	protected void sendAchievementMessage(AchievementInfo a) {
-		//TODO
+		//TODO change the message
 		getPlayer().sendMessage("Achievement get: " + a.getAchievement().getName());
 	}
 	

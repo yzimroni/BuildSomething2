@@ -1,14 +1,8 @@
 package net.yzimroni.buildsomething2.game.plots;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
-
-import net.citizensnpcs.api.npc.NPC;
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.game.Builders;
-import net.yzimroni.buildsomething2.game.games.Game;
-import net.yzimroni.buildsomething2.utils.Utils;
-import net.yzimroni.buildsomething2.utils.WorldEditClipboard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -26,6 +20,13 @@ import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.Plot.AccessLevel;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
 import com.worldcretornica.plotme_core.api.IWorld;
+
+import net.citizensnpcs.api.npc.NPC;
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.game.Builders;
+import net.yzimroni.buildsomething2.game.games.Game;
+import net.yzimroni.buildsomething2.utils.Utils;
+import net.yzimroni.buildsomething2.utils.WorldEditClipboard;
 
 public class PlotManager {
 
@@ -66,7 +67,6 @@ public class PlotManager {
 			}
 			pastePlot(plot, g.getMap().getYPaste(), clipboard);
 			return info;
-			//return id;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -113,11 +113,16 @@ public class PlotManager {
 		if (from != null) {
 			if (from.getOwnerId() != null) {
 				try {
-					ResultSet rs = plugin.getDB().get("SELECT ID FROM games WHERE plot_type='0' AND plot_id='" + from.getId() + "'");
+					PreparedStatement gamePre = plugin.getDB().getPrepare("SELECT ID FROM games WHERE plot_type='0' AND plot_id=?");
+					gamePre.setString(1, from.getId().toString());
+					
+					ResultSet rs = gamePre.executeQuery();
 					int id = -1;
 					if (rs.next()) {
 						id = rs.getInt("ID");
 					}
+					gamePre.close();
+					rs.close();
 					if (id == -1) {
 						System.out.println("the plot is not a game plot!");
 						return false;
@@ -127,13 +132,23 @@ public class PlotManager {
 						plugin.getCommandManager().addPlotId(id, null);
 						movePlot(from, to);
 						PlotMeCoreManager.getInstance().deletePlot(from);
-						plugin.getDB().set("UPDATE games SET plot_type='1',request_bot='0',plot_id='" + to.getId() + "' WHERE ID='" + id + "'");
-						ResultSet npcs = plugin.getDB().get("SELECT npc_id FROM game_players WHERE game_id='" + id + "' AND npc_id >= 0");
+						PreparedStatement updatePre = plugin.getDB().getPrepare("UPDATE games SET plot_type='1',request_bot='0',plot_id=? WHERE ID=?");
+						updatePre.setString(1, to.getId().toString());
+						updatePre.setInt(2, id);
+						updatePre.executeUpdate();
+						updatePre.close();
+						
+						PreparedStatement npcPre = plugin.getDB().getPrepare("SELECT npc_id FROM game_players WHERE game_id=? AND npc_id >= 0");
+						npcPre.setInt(1, id);
+						
+						ResultSet npcs = npcPre.executeQuery();
 						while (npcs.next()) {
 							int npc_id = npcs.getInt("npc_id");
 							npcmanager.removeNPC(npc_id);
 							//TODO need to remove the npc id from the row as well?
 						}
+						npcs.close();
+						npcPre.close();
 						return true;
 					} else {
 						System.out.println("to is null");
@@ -179,10 +194,14 @@ public class PlotManager {
 	
 	public String getPlotId(int id) {
 		try {
-			 ResultSet rs = plugin.getDB().get("SELECT plot_id FROM games WHERE plot_type='0' AND ID='" + id + "'");
-			 if (rs.next()) {
-				 return rs.getString("plot_id");
-			 }
+			PreparedStatement pre = plugin.getDB()
+					.getPrepare("SELECT plot_id FROM games WHERE plot_type='0' AND ID=?");
+			pre.setInt(1, id);
+
+			ResultSet rs = pre.executeQuery();
+			if (rs.next()) {
+				return rs.getString("plot_id");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -196,54 +215,6 @@ public class PlotManager {
 		return npcmanager;
 	}
 	
-	/*private int sendPlotInfo(Builders builders, Game g, Plot plot, List<NPC> c) {
-		try {
-			/**
-			 * TO DO:
-			 * tables: plots (without UUID and npc_id), playerplots (with UUID, plots_id, npc_id)
-			 * 
-			 
-			PreparedStatement ps = plugin.getDB().getPrepare("INSERT INTO plots (plot_id,word_id,map_id,date) VALUES(?,?,?,?)");
-			//ps.setString(1, p.getUniqueId().toString());
-			ps.setString(1, plot.getId().toString());
-			//ps.setInt(3, c.getId());
-			ps.setInt(2, g.getWord().getId());
-			ps.setInt(3, g.getMap().getId());
-			long date = System.currentTimeMillis();
-			ps.setLong(4, date);
-			ps.executeUpdate();
-			int plot_id = -1;
-			ResultSet rs = plugin.getDB().get("SELECT ID FROM plots WHERE date='" + date + "' AND map_id=" + g.getMap().getId());
-			rs.first();
-			plot_id = rs.getInt("ID");
-			if (plot_id == -1) {
-				System.out.println("ERROR, PLOTID IS -1");
-				System.out.println(builders);
-				System.out.println(g);
-				System.out.println(plot);
-				System.out.println(plot.getId());
-				System.out.println(c);
-				System.out.println(ps);
-				System.out.println(rs);
-				System.out.println(date);
-				throw new Exception();
-			} else {
-				List<Player> players = builders.getPlayers();
-				for (int i = 0; i<players.size(); i++) {
-					Player p = players.get(i);
-					PreparedStatement pr = plugin.getDB().getPrepare("INSERT INTO playerplots (UUID,plot_id,npc_id) VALUES(?,?,?)");
-					pr.setString(1, p.getUniqueId().toString());
-					pr.setInt(2, plot_id);
-					pr.setInt(3, c.get(i).getId());
-					pr.executeUpdate();
-				}
-				return plot_id;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return -1;
-	}*/
 	public enum CPlotType{
 		NORMAL("plotworld"), BOT("botplot"), REPORT("reportplot");
 		

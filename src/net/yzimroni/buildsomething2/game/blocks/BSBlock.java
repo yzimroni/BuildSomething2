@@ -5,6 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import net.yzimroni.buildsomething2.utils.ItemNames;
+
 public class BSBlock implements HotbarItem {
 	private int id;
 	private Material type;
@@ -35,6 +37,13 @@ public class BSBlock implements HotbarItem {
 			i.setItemMeta(im);
 		}
 		return i;
+	}
+	
+	public String getDisplayName() {
+		if (hasName()) {
+			return getName();
+		}
+		return ItemNames.lookup(toItemStack());
 	}
 
 	public Material getType() {
@@ -78,7 +87,6 @@ public class BSBlock implements HotbarItem {
 	
 	public boolean hasName() {
 		return false;
-		//return getName() != null && !getName().isEmpty();
 	}
 
 	/**

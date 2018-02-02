@@ -3,15 +3,6 @@ package net.yzimroni.buildsomething2.game.bonuses;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.ChangeWord;
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.NumberOfLetters;
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.RandomLetters;
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.Timebomb;
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.worldedit.WorldEditManager;
-import net.yzimroni.buildsomething2.player.BPlayer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Rotation;
@@ -20,6 +11,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.ChangeWord;
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.NumberOfLetters;
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.RandomLetters;
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.Timebomb;
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.worldedit.WorldEditManager;
+import net.yzimroni.buildsomething2.player.BPlayer;
 
 public class BonusesManager implements Listener {
 	public BuildSomethingPlugin plugin;
@@ -95,7 +95,6 @@ public class BonusesManager implements Listener {
 		if (!b.isBuyable()) {
 			return false;
 		}
-		//TO DO
 		if (b.getPrice() == 0) {
 			p.getPlayer().sendMessage("This Bonus is free!");
 			return false;

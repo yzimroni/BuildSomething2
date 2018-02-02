@@ -5,6 +5,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.effects.effects.BoomBox;
 import net.yzimroni.buildsomething2.game.effects.effects.DripLava;
@@ -23,17 +34,6 @@ import net.yzimroni.buildsomething2.game.effects.views.EndGameBuilder;
 import net.yzimroni.buildsomething2.game.effects.views.KnowWord;
 import net.yzimroni.buildsomething2.player.BPlayer;
 import net.yzimroni.buildsomething2.utils.Utils;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class EffectsManager implements Listener {
 	private BuildSomethingPlugin plugin;
@@ -269,7 +269,6 @@ public class EffectsManager implements Listener {
 				if (eu.has(bp)) {
 					openChooseEffectsViewInv(p, eu);
 				} else {
-					//TO DO buy
 					openBuyEffectViewInv(p, eu);
 				}
 			}
@@ -280,14 +279,13 @@ public class EffectsManager implements Listener {
 				return;
 			}
 			Effect ef = getEffectByItem(current);
-			EffectView eu = getViewByItem(e.getInventory().getItem(0)); //TO DO get it;
+			EffectView eu = getViewByItem(e.getInventory().getItem(0));
 			
 			if (ef != null && eu != null) {
 				if (eu.getEffect(bp).getId() == ef.getId()) {
 					p.sendMessage("This effect is already choose for " + eu.getName() + "!");
 					return;
 				}
-				//TO DO set the default effect for eu;
 				bp.getData().setEffectChoose(eu.getId(), ef.getId());
 				p.sendMessage("Change the effect of " + eu.getName() + " to " + ef.getName());
 			}

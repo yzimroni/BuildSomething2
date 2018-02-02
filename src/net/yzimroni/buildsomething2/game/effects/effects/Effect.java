@@ -2,15 +2,15 @@ package net.yzimroni.buildsomething2.game.effects.effects;
 
 import java.util.List;
 
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.player.BPlayer;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.player.BPlayer;
 
 public abstract class Effect {
 

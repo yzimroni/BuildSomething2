@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.player.BPlayer;
-import net.yzimroni.buildsomething2.utils.ItemNames;
 import net.yzimroni.buildsomething2.utils.Utils;
 
 public class BlockManager {
@@ -26,12 +26,7 @@ public class BlockManager {
 	}
 	
 	public BSBlock getBlockById(int id) {
-		for (BSBlock b : blocks) {
-			if (b.getId() == id) {
-				return b;
-			}
-		}
-		return null;
+		return blocks.stream().filter(b -> b.getId() == id).findFirst().orElse(null);
 	}
 		
 	public List<BSBlock> getBlocks() {
@@ -39,15 +34,10 @@ public class BlockManager {
 	}
 
 	public boolean hasBlock(BPlayer p, BSBlock b) {
-		for (int id : p.getData().getBlocks()) {
-			if (b.getId() == id) {
-				return true;
-			}
-		}
-		return false;
+		return p.getData().getBlocks().contains(b.getId());
 	}
 	
-	public boolean hasBlockAndFree(BPlayer p, BSBlock b) {
+	public boolean hasBlockOrFree(BPlayer p, BSBlock b) {
 		if (b.getPrice() == 0) {
 			return true;
 		}
@@ -55,31 +45,11 @@ public class BlockManager {
 	}
 	
 	public BSBlock getByType(Material type, byte data) {
-		for (BSBlock b : blocks) {
-			if (b.getType().equals(type) && b.getData() == data) {
-				return b;
-			}
-		}
-		return null;
+		return blocks.stream().filter(b -> b.getType().equals(type) && b.getData() == data).findFirst().orElse(null);
 	}
 	
 	public List<BSBlock> getBlocks(BPlayer p) {
-		List<BSBlock> pblocks = new ArrayList<BSBlock>();
-		
-		for (BSBlock b : blocks) {
-			if (hasBlockAndFree(p, b)) {
-				pblocks.add(b);
-			}
-		}
-		
-		return pblocks;
-	}
-	
-	public String getBlockName(BSBlock b) {
-		if (b.hasName()) {
-			return b.getName();
-		}
-		return ItemNames.lookup(b.toItemStack());
+		return blocks.stream().filter(b -> hasBlockOrFree(p, b)).collect(Collectors.toList());
 	}
 	
 	public String serializeHotbar(HashMap<Integer, ItemStack> items) {
@@ -131,7 +101,6 @@ public class BlockManager {
 	protected void initBlocks() {
 		blocks.clear();
 		try {
-			//TO DO order by
 			ResultSet rs = plugin.getDB().get("SELECT * FROM blocks ORDER BY order_i DESC");
 			while (rs.next()) {
 				BSBlock b = new BSBlock(rs.getInt("ID"), Material.valueOf(rs.getString("type")), (byte) rs.getInt("data"), rs.getString("displayname"), rs.getDouble("price"));
@@ -143,21 +112,8 @@ public class BlockManager {
 		plugin.log.info("loaded " + blocks.size() + " blocks");
 	}
 	
-	public void onDisable() {
-		blocks.clear();
-		blocks = null;
-	}
-
 	public int countBlocks(BPlayer p) {
-		int count = 0;
-		for (BSBlock b : blocks) {
-			if (hasBlock(p, b)) {
-				count++;
-			}
-		}
-		
-		return count;
-	
+		return (int) blocks.stream().filter(b -> hasBlock(p, b)).count();	
 	}
 	
 	/**

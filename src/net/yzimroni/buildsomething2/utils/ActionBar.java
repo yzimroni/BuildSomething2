@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import net.minecraft.server.v1_9_R1.IChatBaseComponent;
-import net.minecraft.server.v1_9_R1.PacketPlayOutChat;
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+
+import net.minecraft.server.v1_9_R1.IChatBaseComponent;
+import net.minecraft.server.v1_9_R1.PacketPlayOutChat;
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 
 public class ActionBar {
 	private BuildSomethingPlugin plugin;
@@ -47,11 +47,6 @@ public class ActionBar {
 	    ((CraftPlayer) p).getHandle().playerConnection.sendPacket(bar);
 	}
 	
-	public void onDisable() {
-		messages.clear();
-		messages = null;
-	}
-	
 	public boolean hasActionBar(Player p) {
 		return messages.containsKey(p.getUniqueId());
 	}
@@ -68,9 +63,6 @@ public class ActionBar {
 		if (s == null || s.isEmpty()) {
 			removeActionBar(p);
 			return;
-		}
-		if (hasActionBar(p)) {
-			removeActionBar(p);
 		}
 		messages.put(p.getUniqueId(), s);
 		sendPacket(p, s);

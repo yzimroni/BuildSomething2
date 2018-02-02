@@ -2,14 +2,6 @@ package net.yzimroni.buildsomething2.game.plots;
 
 import java.util.logging.Level;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.event.NPCRightClickEvent;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.trait.LookClose;
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.game.Word;
-import net.yzimroni.buildsomething2.player.BPlayer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -17,6 +9,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.metadata.FixedMetadataValue;
+
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.event.NPCRightClickEvent;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.trait.LookClose;
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.game.Word;
+import net.yzimroni.buildsomething2.player.BPlayer;
 
 public class NPCManager implements Listener {
 	private BuildSomethingPlugin plugin;

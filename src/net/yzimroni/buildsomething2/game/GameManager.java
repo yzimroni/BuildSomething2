@@ -7,19 +7,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.game.blocks.BlockManager;
-import net.yzimroni.buildsomething2.game.bonuses.BonusesManager;
-import net.yzimroni.buildsomething2.game.effects.EffectsManager;
-import net.yzimroni.buildsomething2.game.games.BotGame;
-import net.yzimroni.buildsomething2.game.games.BuildersGame;
-import net.yzimroni.buildsomething2.game.games.Game;
-import net.yzimroni.buildsomething2.game.plots.PlotInfo;
-import net.yzimroni.buildsomething2.game.plots.PlotManager;
-import net.yzimroni.buildsomething2.player.BPlayer;
-import net.yzimroni.buildsomething2.utils.IntWarpper;
-import net.yzimroni.party.parties.Party;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -41,23 +28,40 @@ import org.bukkit.plugin.Plugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.game.blocks.BlockManager;
+import net.yzimroni.buildsomething2.game.bonuses.BonusesManager;
+import net.yzimroni.buildsomething2.game.effects.EffectsManager;
+import net.yzimroni.buildsomething2.game.games.BotGame;
+import net.yzimroni.buildsomething2.game.games.BuildersGame;
+import net.yzimroni.buildsomething2.game.games.Game;
+import net.yzimroni.buildsomething2.game.plots.PlotInfo;
+import net.yzimroni.buildsomething2.game.plots.PlotManager;
+import net.yzimroni.buildsomething2.player.BPlayer;
+import net.yzimroni.buildsomething2.utils.IntWarpper;
+import net.yzimroni.party.parties.Party;
+
 public class GameManager implements Listener {
-	List<Map> maps = new ArrayList<Map>();
-	List<Game> games = new ArrayList<Game>();
-	List<IntWarpper> words = new ArrayList<IntWarpper>();
-	List<IntWarpper> last_words = new ArrayList<IntWarpper>();
-	List<UUID> last_builders = new ArrayList<UUID>();
+
+	private List<Map> maps = new ArrayList<Map>();
+	private List<Game> games = new ArrayList<Game>();
+	private List<IntWarpper> words = new ArrayList<IntWarpper>();
+	private List<IntWarpper> last_words = new ArrayList<IntWarpper>();
+	private List<UUID> last_builders = new ArrayList<UUID>();
+
 	public WorldGuardPlugin worldguard = null;
+
 	private PlotManager plotmanager;
 	private BlockManager blockmanager;
 	private BonusesManager bonusesmanager;
 	private EffectsManager effectsmanager;
+
 	private boolean openNewGames = true;
 	private boolean remove = true;
 	private int maxPlayers = 12;
 
 	public BuildSomethingPlugin plugin;
-	
+
 	public GameManager(BuildSomethingPlugin p) {
 		plugin = p;
 		loadWords();
@@ -153,26 +157,6 @@ public class GameManager implements Listener {
 			}
 		}
 		System.out.println("we dont need more games 153");
-		/*if (Bukkit.getOnlinePlayers().size() >= 8) {
-			if (builder1 < 3) {
-				return new BuildersGame(this, 1, maxPlayers);
-			} else if (builders < 3) {
-				return new BuildersGame(this, 2, maxPlayers);
-			} else {
-				System.out.println("we dont need more games 132");
-			}
-		} else {
-			if (builder1 < 1) {
-				//TODO 1 to 2: what?
-				return new BuildersGame(this, 1, maxPlayers);
-			} else if (builders < 1) {
-				return new BuildersGame(this, 2, maxPlayers);
-			} else if (bot < 2) {
-				return new BotGame(this, maxPlayers);
-			} else {
-				System.out.println("we dont need more games 133");
-			}
-		}*/
 		return null;
 	}
 	
@@ -213,20 +197,6 @@ public class GameManager implements Listener {
 				g.removePlayer(b.getPlayer());
 			}
 		}
-		games.clear();
-		games = null;
-		maps.clear();
-		maps = null;
-		words.clear();
-		words = null;
-		last_words.clear();
-		last_words = null;
-		last_builders.clear();
-		last_builders = null;
-		blockmanager.onDisable();
-		blockmanager = null;
-		worldguard = null;
-		effectsmanager = null;
 	}
 	
 	private void initMaps() {
@@ -236,9 +206,7 @@ public class GameManager implements Listener {
 		maps.add(new Map(4, "Forest", new Location(Bukkit.getWorld("Game"), 0.5, 66, 1034.5, 180, 0), new Location(Bukkit.getWorld("Game"), 0.5, 61, 1000.5), "map_forest_4", true, 100));
 		maps.add(new Map(5, "Forest", new Location(Bukkit.getWorld("Game"), 1000.5, 66, 1034.5, 180, 0), new Location(Bukkit.getWorld("Game"), 1000.5, 61, 1000.5), "map_forest_5", true, 100));
 		
-		for (Map m : maps) {
-			makeOutlineBorderBlocks(m);
-		}
+		maps.forEach(this::makeOutlineBorderBlocks);
 	}
 	
 	private void makeOutlineBorderBlocks(Map m) {
@@ -367,15 +335,18 @@ public class GameManager implements Listener {
 	
 	public BotPlot randomBotPlot(List<Player> players) {
 		try {
-			//WHERE plot_type = 1
-			ResultSet rs = plugin.getDB().get("SELECT * FROM games WHERE plot_id IS NOT NULL AND plot_type='1' ORDER BY RAND() DESC LIMIT 1");
+			ResultSet rs = plugin.getDB().get("SELECT * FROM games WHERE plot_id IS NOT NULL AND plot_type='1' ORDER BY RAND() DESC LIMIT 1"); // TODO RAND() has some performance issues
 			if (rs.first()) {
 				List<UUID> builders = new ArrayList<UUID>();
 				int game_id = rs.getInt("ID");
-				ResultSet bu = plugin.getDB().get("SELECT UUID FROM game_players WHERE game_id='" + game_id + "' AND player_type='1'");
+				PreparedStatement pre = plugin.getDB().getPrepare("SELECT UUID FROM game_players WHERE game_id=? AND player_type='1'");
+				pre.setInt(1, game_id);
+				ResultSet bu = pre.executeQuery();
 				while (bu.next()) {
 					builders.add(UUID.fromString(bu.getString("UUID")));
 				}
+				bu.close();
+				pre.close();
 				BotPlot b = new BotPlot(game_id, rs.getInt("word_id"), rs.getString("plot_id"), builders, true);
 				return b;
 			}
@@ -407,7 +378,9 @@ public class GameManager implements Listener {
 	
 	public Word getWord(int id) {
 		try {
-			ResultSet rs = plugin.getDB().get("SELECT * FROM words WHERE ID='" + id + "'");			
+			PreparedStatement pre = plugin.getDB().getPrepare("SELECT * FROM words WHERE ID=?");
+			pre.setInt(1, id);
+			ResultSet rs = pre.executeQuery();
 			if (rs.first()) {
 				Word w = new Word(rs.getInt("ID"), rs.getString("word_english"), rs.getString("word_hebrew"));
 				return w;
@@ -437,7 +410,7 @@ public class GameManager implements Listener {
 			if (party.getOwner().equals(p.getUniqueId())) {
 				return joinParty(g, party);
 			} else {
-				p.sendMessage("You are in a party, only the party owner can join into a game"); //TODO
+				p.sendMessage("You are in a party, only the party owner can join into a game");
 				return false;
 			}
 		}
@@ -620,33 +593,19 @@ public class GameManager implements Listener {
 			game.executeUpdate();
 			
 			id = plugin.getDB().getIdFromPrepared(game);
+			game.close();
 			System.out.println(game.toString());
-			String a = "INSERT INTO game_players (game_id,UUID,player_type,npc_id,know_time) ";
-			String b = "";
-			for (int i = 0; i < info.getPlayersCount(); i++) {
-				if (b.isEmpty()) {
-					b += "VALUES";
-				} else {
-					b += ",";
-				}
-				b += "(?,?,?,?,?)";
-			}
-			PreparedStatement players = plugin.getDB().getPrepareAutoKeys(a + b);
-			int count = 1;
+			PreparedStatement players = plugin.getDB().getPrepare("INSERT INTO game_players (game_id,UUID,player_type,npc_id,know_time) VALUES (?,?,?,?,?)");
 			for (PlayerInfo p : info.getPlayers()) {
-				players.setInt(count, id);
-				count++;
-				players.setString(count, p.getPlayer().toString());
-				count++;
-				players.setInt(count, p.getPlayerType());
-				count++;
-				players.setInt(count, p.getNpcId());
-				count++;
-				players.setLong(count, p.getKnowTime());
-				count++;
+				players.clearParameters();
+				players.setInt(1, id);
+				players.setString(2, p.getPlayer().toString());
+				players.setInt(3, p.getPlayerType());
+				players.setInt(4, p.getNpcId());
+				players.setLong(5, p.getKnowTime());
+				players.executeUpdate();
 			}
-			System.out.println(players.toString());
-			players.executeUpdate();
+			players.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -654,8 +613,6 @@ public class GameManager implements Listener {
 	}
 	
 	public int sendReport(Player reporter, String reason, Game g, PlotInfo plot) {
-		int id = -1;
-		
 		try {
 			PreparedStatement report = plugin.getDB().getPrepareAutoKeys("INSERT INTO reports (reporterUUID,gameId,reason,plotId,date) VALUES(?,?,?,?,?)");
 			report.setString(1, reporter.getUniqueId().toString());
@@ -665,12 +622,12 @@ public class GameManager implements Listener {
 			report.setLong(5, System.currentTimeMillis());
 			report.executeUpdate();
 			
-			id = plugin.getDB().getIdFromPrepared(report);
+			return plugin.getDB().getIdFromPrepared(report);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return id;
+		return -1;
 	}
 	
 	public void closeAll() {
@@ -757,9 +714,7 @@ public class GameManager implements Listener {
 
 	public void setMaxPlayers(int maxPlayers) {
 		this.maxPlayers = maxPlayers;
-		for (Game g : games) {
-			g.setMaxPlayers(this.maxPlayers);
-		}
+		games.forEach(game -> game.setMaxPlayers(maxPlayers));
 	}
 	
 }

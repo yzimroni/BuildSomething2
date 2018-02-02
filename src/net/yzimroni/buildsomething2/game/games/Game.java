@@ -1,6 +1,7 @@
 package net.yzimroni.buildsomething2.game.games;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,23 +9,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
-
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.game.GameInfo;
-import net.yzimroni.buildsomething2.game.GameInfo.GameType;
-import net.yzimroni.buildsomething2.game.GameManager;
-import net.yzimroni.buildsomething2.game.Gamemode;
-import net.yzimroni.buildsomething2.game.LanguageOptions;
-import net.yzimroni.buildsomething2.game.Map;
-import net.yzimroni.buildsomething2.game.Word;
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
-import net.yzimroni.buildsomething2.player.BPlayer;
-import net.yzimroni.buildsomething2.player.economy.RewardInfo;
-import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
-import net.yzimroni.buildsomething2.scoreboard.SimpleScoreboard;
-import net.yzimroni.buildsomething2.utils.IntWarpper;
-import net.yzimroni.buildsomething2.utils.Utils;
-import net.yzimroni.buildsomething2.utils.WorldEditClipboard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -51,11 +35,32 @@ import com.sk89q.worldedit.blocks.BlockID;
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldedit.regions.Polygonal2DRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.game.GameInfo;
+import net.yzimroni.buildsomething2.game.GameInfo.GameType;
+import net.yzimroni.buildsomething2.game.GameManager;
+import net.yzimroni.buildsomething2.game.Gamemode;
+import net.yzimroni.buildsomething2.game.LanguageOptions;
+import net.yzimroni.buildsomething2.game.Map;
+import net.yzimroni.buildsomething2.game.Word;
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
+import net.yzimroni.buildsomething2.player.BPlayer;
+import net.yzimroni.buildsomething2.player.economy.RewardInfo;
+import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
+import net.yzimroni.buildsomething2.scoreboard.SimpleScoreboard;
+import net.yzimroni.buildsomething2.utils.IntWarpper;
+import net.yzimroni.buildsomething2.utils.Utils;
+import net.yzimroni.buildsomething2.utils.WorldEditClipboard;
 public abstract class Game {
 	
 	public static final int MIN_PLAYERS_START = 2;
 	public static final int LOOBY_COUNT_DOWN_TIME = 10/* 30 */;
 	public static final int GAME_TIME = 300;
+
+	private static final List<String> SYMBOLS = Arrays.asList("/", "\"", ".", "`", ";", "~", "!", "@", "#", "$", "%", "^",
+			"&", "*", "(", ")", "_", "-", "+", "=", " ", "{", "}", "[", "]", "'", "<", ">", "0", "1", "2", "3", "4",
+			"5", "6", "7", "8", "9"); // TODO improve this
 
 	protected BuildSomethingPlugin plugin;
 	protected GameManager manager;
@@ -85,8 +90,6 @@ public abstract class Game {
 
 	protected IntWarpper lobby_count_down;
 	protected IntWarpper game_count_down;
-
-	private static List<String> symbols;	
 	
 	public Game(GameManager gm, int maxPlayers) {
 		gameId = UUID.randomUUID();
@@ -119,43 +122,6 @@ public abstract class Game {
 		gameInfo.setOpenTime(System.currentTimeMillis());
 		
 		languageOptions = new LanguageOptions(this);
-	}
-	
-	static {
-		if (symbols == null) {
-			symbols = new ArrayList<String>();
-			symbols.add("/");
-			symbols.add("\"");
-			symbols.add(".");
-			symbols.add("`");
-			symbols.add(";");
-			symbols.add("~");
-			symbols.add("!");
-			symbols.add("@");
-			symbols.add("#");
-			symbols.add("$");
-			symbols.add("%");
-			symbols.add("^");
-			symbols.add("&");
-			symbols.add("*");
-			symbols.add("(");
-			symbols.add(")");
-			symbols.add("_");
-			symbols.add("-");
-			symbols.add("+");
-			symbols.add("=");
-			symbols.add(" ");
-			symbols.add("{");
-			symbols.add("}");
-			symbols.add("[");
-			symbols.add("]");
-			symbols.add("'");
-			symbols.add("<");
-			symbols.add(">");
-			for (int i = 0; i < 10; i++) {
-				symbols.add("" + i);
-			}
-		}
 	}
 	
 	public boolean addPlayer(Player p) {
@@ -206,7 +172,7 @@ public abstract class Game {
 					return;
 				}
 				if (lobby_count_down.getValue() % 5 == 0 || lobby_count_down.getValue() <= 5 && lobby_count_down.getValue() != 0) {
-					message("Game starting in " + Utils.timeString(lobby_count_down.getValue())/*lobby_count_down.i + " second" + (lobby_count_down.i == 1 ? "" : "s")*/);
+					message("Game starting in " + Utils.timeString(lobby_count_down.getValue()));
 				}
 				
 				if (create_scoreboard.getValue() == 0) {
@@ -328,7 +294,8 @@ public abstract class Game {
 		if (m.contains(w) || m.toUpperCase().contains(w.toUpperCase()) || w.equalsIgnoreCase(m)) {
 			return true;
 		}
-		for (String s : symbols) {
+		// TODO improve this
+		for (String s : SYMBOLS) {
 			if (m.replace(s, "").contains(w.replace(s, "")) || 
 					m.replace(s, "").toUpperCase().contains(w.replace(s, "").toUpperCase())
 					|| w.replace(s, "").equalsIgnoreCase(m.replace(s, ""))) {
@@ -452,7 +419,7 @@ public abstract class Game {
 		for (Item i : map.getBuilder().getWorld().getEntitiesByClass(Item.class)) {
 			if (i != null) {
 				if (!i.isDead() && i.isValid()) {
-					if (i.getLocation().distance(map.getBuilder()) < 100) {
+					if (i.getLocation().distance(map.getBuilder()) < 1000) {
 						i.remove();
 					}
 				}
@@ -577,7 +544,6 @@ public abstract class Game {
 	}
 	
 	public void onPlayerChat(final AsyncPlayerChatEvent e) {
-		//TODO check if the game is running
 		if (check(e.getPlayer())) {
 			if (mode == Gamemode.RUNNING) {
 
@@ -660,7 +626,6 @@ public abstract class Game {
 	public void onPlayerQuit(PlayerQuitEvent e) {
 		if (check(e.getPlayer())) {
 			removePlayer(e.getPlayer());
-			//TODO check this
 		}
 	}
 	

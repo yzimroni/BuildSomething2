@@ -3,14 +3,14 @@ package net.yzimroni.buildsomething2.game.effects.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.game.effects.effects.Effect;
-import net.yzimroni.buildsomething2.player.BPlayer;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.game.effects.effects.Effect;
+import net.yzimroni.buildsomething2.player.BPlayer;
 
 public abstract class EffectView {
 	
@@ -40,7 +40,6 @@ public abstract class EffectView {
 	
 	public boolean has(BPlayer p) {
 		return getPrice() == 0 || p.getData().hasView(getId());
-		//return true;
 	}
 	
 	public abstract Effect getDefaultEffect();

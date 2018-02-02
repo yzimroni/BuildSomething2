@@ -1,3 +1,5 @@
+// Source: https://bukkit.org/threads/simplescoreboard-make-pretty-scoreboards-with-ease.263041/
+
 package net.yzimroni.buildsomething2.scoreboard;
 
 import java.util.AbstractMap;

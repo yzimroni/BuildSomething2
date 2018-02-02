@@ -2,15 +2,6 @@ package net.yzimroni.buildsomething2.scoreboard;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
-
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.game.Gamemode;
-import net.yzimroni.buildsomething2.game.games.BuildersGame;
-import net.yzimroni.buildsomething2.game.games.Game;
-import net.yzimroni.buildsomething2.player.BPlayer;
-import net.yzimroni.buildsomething2.player.stats.GlobalStats;
-import net.yzimroni.buildsomething2.utils.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,6 +12,14 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.game.Gamemode;
+import net.yzimroni.buildsomething2.game.games.BuildersGame;
+import net.yzimroni.buildsomething2.game.games.Game;
+import net.yzimroni.buildsomething2.player.BPlayer;
+import net.yzimroni.buildsomething2.player.stats.GlobalStats;
+import net.yzimroni.buildsomething2.utils.Utils;
 
 public class ScoreboardManager {
 	private BuildSomethingPlugin plugin;
@@ -156,7 +155,7 @@ public class ScoreboardManager {
 				if (s.startsWith(TIME_PREFIX)) {
 					int score = o.getScore(s).getScore();
 					o.getScoreboard().resetScores(s);
-					if (g.getLobbyCountDown().getValue() != 0 && g.getLobbyCountDown().getValue() != Game.LOOBY_COUNT_DOWN_TIME) { //TODO != or == in the last?
+					if (g.getLobbyCountDown().getValue() != 0 && g.getLobbyCountDown().getValue() != Game.LOOBY_COUNT_DOWN_TIME) {
 						o.getScore(time(g.getLobbyCountDown().getValue())).setScore(score);
 					} else if (g.getMode() == Gamemode.RUNNING) {
 						o.getScore(time(g.getGameCountDown().getValue())).setScore(score);

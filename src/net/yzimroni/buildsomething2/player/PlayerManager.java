@@ -1,15 +1,9 @@
 package net.yzimroni.buildsomething2.player;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.UUID;
-
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.player.achievement.AchievementInfo;
-import net.yzimroni.buildsomething2.player.achievement.AchievementManager;
-import net.yzimroni.buildsomething2.player.economy.Economy;
-import net.yzimroni.buildsomething2.utils.Utils;
-import net.yzimroni.party.parties.PartyManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,6 +13,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.player.achievement.AchievementInfo;
+import net.yzimroni.buildsomething2.player.achievement.AchievementManager;
+import net.yzimroni.buildsomething2.player.economy.Economy;
+import net.yzimroni.buildsomething2.utils.Utils;
+import net.yzimroni.party.parties.PartyManager;
 
 public class PlayerManager implements Listener {
 	private BuildSomethingPlugin plugin;
@@ -50,10 +51,6 @@ public class PlayerManager implements Listener {
 		for (UUID u : bplayers.keySet()) {
 			getPlayer(u).save(plugin);
 		}
-		bplayers.clear();
-		bplayers = null;
-		economy = null;
-		achievementManager = null;
 	}
 	
 	private void autoSave() {
@@ -144,30 +141,31 @@ public class PlayerManager implements Listener {
 	public boolean loadPlayer(UUID u) {
 		if (isLoad(u)) return true;
 		try {
-			ResultSet rs = plugin.getDB().get("SELECT * FROM players WHERE UUID='" + u.toString() + "'");
+			PreparedStatement pre = plugin.getDB().getPrepare("SELECT * FROM players WHERE UUID=?");
+			pre.setString(1, u.toString());
+			ResultSet rs = pre.executeQuery();
+
 			if (rs.first()) {
-				BPlayer bp = new BPlayer();
+				BPlayer bp = new BPlayer(u, rs.getLong("firstLogin"), rs.getLong("playTime"), System.currentTimeMillis());
 				bp.setUUID(u);
-				bp.setFirstLogin(rs.getLong("firstLogin"));
-				bp.setLastLogin(System.currentTimeMillis());
 				bp.setLastIp(rs.getString("lastIp"));
-				bp.setPlayTime(rs.getLong("playTime"));
 				bp.setLoginTimes(rs.getInt("loginTimes"));
 				bp.setHebrewWords(rs.getBoolean("hebrewWords"));
 				PlayerData d = PlayerData.loadRS(u, rs, plugin);
 				bp.setData(d);
 				bplayers.put(u, bp);
+				rs.close();
+				pre.close();
 				return true;
 			} else {
 				Player p = Bukkit.getPlayer(u);
 				long firstLogin = System.currentTimeMillis();
-				plugin.getDB().set("INSERT INTO players (UUID,Name,firstLogin) VALUES('" + u.toString() + "','" + p.getName() + "','" + firstLogin + "')");
-				BPlayer bp = new BPlayer();
-				bp.setUUID(u);
-				bp.setFirstLogin(firstLogin);
-				bp.setLastLogin(firstLogin);
-				bp.setPlayTime(0);
-				
+				PreparedStatement insertPre = plugin.getDB().getPrepare("INSERT INTO players (UUID,Name,firstLogin) VALUES(?,?,?)");
+				insertPre.setString(1, u.toString());
+				insertPre.setString(2, p.getName());
+				insertPre.setLong(3, firstLogin);
+				insertPre.executeUpdate();
+				BPlayer bp = new BPlayer(u, firstLogin, 0L, firstLogin);				
 				PlayerData d = PlayerData.createNew(u);
 				bp.setData(d);
 				bplayers.put(u, bp);

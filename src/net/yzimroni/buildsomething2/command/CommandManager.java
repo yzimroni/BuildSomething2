@@ -30,11 +30,4 @@ public class CommandManager {
 		plot.addPlotId(i, p);
 	}
 	
-	public void onDisable() {
-		money = null;
-		game = null;
-		stats = null;
-		plot = null;
-	}
-	
 }

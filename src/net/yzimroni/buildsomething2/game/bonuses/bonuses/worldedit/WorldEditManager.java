@@ -2,12 +2,6 @@ package net.yzimroni.buildsomething2.game.bonuses.bonuses.worldedit;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.game.blocks.BSBlock;
-import net.yzimroni.buildsomething2.game.bonuses.BonusesManager;
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
-import net.yzimroni.buildsomething2.game.games.Game;
-import net.yzimroni.buildsomething2.utils.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,6 +21,13 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.function.mask.RegionMask;
 import com.sk89q.worldedit.regions.CuboidRegion;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.game.blocks.BSBlock;
+import net.yzimroni.buildsomething2.game.bonuses.BonusesManager;
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
+import net.yzimroni.buildsomething2.game.games.Game;
+import net.yzimroni.buildsomething2.utils.Utils;
 
 public class WorldEditManager implements Listener {
 

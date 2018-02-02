@@ -1,11 +1,11 @@
 package net.yzimroni.buildsomething2.game.effects.effects;
 
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.game.effects.effects.lib.ParticleEffect;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.game.effects.effects.lib.ParticleEffect;
 
 public class Heart extends Effect {
 	

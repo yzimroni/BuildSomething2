@@ -1,5 +1,7 @@
 package net.yzimroni.buildsomething2.game.blocks;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +42,7 @@ public class BlockShop implements Listener {
 	
 	@EventHandler
 	public void onPlayerCommand(PlayerCommandPreprocessEvent e) {
+		// TODO Make it a proper command
 		if (e.getPlayer().isOp()) {
 			if (e.getMessage().equalsIgnoreCase("/clearitemframes")) {
 				e.setCancelled(true);
@@ -77,9 +80,18 @@ public class BlockShop implements Listener {
 							if (i.getType().isBlock()) {
 								BSBlock t = manager.getByType(i.getType(), Utils.getData(i.getData()));
 								if (t == null) {
-									plugin.getDB().set("INSERT INTO blocks (type,data,price) VALUES('" + i.getType().name() + "','" + Utils.getData(i.getData()) + "','" + d + "')");
-									e.getPlayer().sendMessage("Block added!");
-									manager.initBlocks();
+									PreparedStatement pre = plugin.getDB().getPrepare("INSERT INTO blocks (type,data,price) VALUES(?,?,?)");
+									try {
+										pre.setString(1, i.getType().name());
+										pre.setByte(2, Utils.getData(i.getData()));
+										pre.setDouble(3, d);
+										pre.executeUpdate();
+										pre.close();
+										e.getPlayer().sendMessage("Block added!");
+										manager.initBlocks();
+									} catch (SQLException e1) {
+										e1.printStackTrace();
+									}
 								} else {
 									e.getPlayer().sendMessage("the block already in the system");
 								}
@@ -172,7 +184,7 @@ public class BlockShop implements Listener {
 		BSBlock b = manager.getBlockById(id);
 		String[] messages = new String[]{
 				"====== Block Info: =======",
-				"Name: " + manager.getBlockName(b),
+				"Name: " + b.getDisplayName(),
 				"Price: " + (b.getPrice() == 0 ? "Free" : b.getPrice()),
 				"You " + (manager.hasBlock(p, b) ? "" : "don't") + " have this block!"
 		};
@@ -186,13 +198,13 @@ public class BlockShop implements Listener {
 			return false;
 		}
 		if (manager.hasBlock(p, b)) {
-			p.getPlayer().sendMessage("You already have " + manager.getBlockName(b) + "!");
+			p.getPlayer().sendMessage("You already have " + b.getDisplayName() + "!");
 			return false;
 		}
 		if (b != null) {
 			if (plugin.getPlayerManager().getEconomy().has(p.getUUID(), b.getPrice()) && plugin.getPlayerManager().getEconomy().withdrawPlayer(p.getUUID(), b.getPrice())) {
 				p.getData().addBlock(b.getId());
-				p.getPlayer().sendMessage("You bought " + manager.getBlockName(b) + "!");
+				p.getPlayer().sendMessage("You bought " + b.getDisplayName() + "!");
 				plugin.getScoreboardManager().createPlayerScoreboard(p.getPlayer());
 				return true;
 			} else {

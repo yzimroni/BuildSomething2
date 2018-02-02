@@ -1,9 +1,9 @@
 package net.yzimroni.buildsomething2.game.effects.views;
 
+import org.bukkit.Material;
+
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.effects.effects.Effect;
-
-import org.bukkit.Material;
 
 public class EndGameBuilder extends EffectView {
 

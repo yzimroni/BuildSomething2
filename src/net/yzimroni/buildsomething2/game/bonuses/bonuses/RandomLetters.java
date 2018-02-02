@@ -2,14 +2,14 @@ package net.yzimroni.buildsomething2.game.bonuses.bonuses;
 
 import java.util.Random;
 
+import org.bukkit.Material;
+
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.bonuses.BonusUser;
 import net.yzimroni.buildsomething2.game.games.Game;
 import net.yzimroni.buildsomething2.player.BPlayer;
 import net.yzimroni.buildsomething2.utils.MaterialData;
 import net.yzimroni.buildsomething2.utils.Utils;
-
-import org.bukkit.Material;
 
 public class RandomLetters extends Bonus {
 

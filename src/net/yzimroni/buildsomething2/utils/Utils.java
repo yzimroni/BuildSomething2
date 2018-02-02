@@ -1,7 +1,5 @@
 package net.yzimroni.buildsomething2.utils;
 
-import io.puharesource.mc.titlemanager.api.TitleObject;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,24 +16,12 @@ import org.bukkit.material.MaterialData;
 
 import com.worldcretornica.plotme_core.PlotId;
 
+import io.puharesource.mc.titlemanager.api.TitleObject;
+
 public class Utils {
 	
 	public static void setPlayerListHeader(Player player,String header, String footer){
 		TitleAPI.sendTabTitle(player, header, footer);
-       /* CraftPlayer cplayer = (CraftPlayer) player;
-        PlayerConnection connection = cplayer.getHandle().playerConnection;
-        IChatBaseComponent hj = ChatSerializer.a("{\"text\":\""+header+"\"}");
-        PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
-        try{
-            Field headerField = packet.getClass().getDeclaredField("a");
-            headerField.setAccessible(true);
-            headerField.set(packet, hj);
-            headerField.setAccessible(!headerField.isAccessible());
-          
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        connection.sendPacket(packet);*/
     }
 	
 	@SuppressWarnings("deprecation")
@@ -178,8 +164,6 @@ public class Utils {
 	
 	public static void sendTitle(Player player, String title, int fadeIn, int stay, int fadeOut) {
 		  new TitleObject(title, TitleObject.TitleType.TITLE).setFadeIn(fadeIn).setStay(stay).setFadeOut(fadeOut).send(player);
-		  /*TitleObject o = new TitleObject(title, TitleType.TITLE);
-		  o.setTitle(title)*/
 	}
 	
 	public static void sendTitleSub(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {

@@ -3,12 +3,11 @@ package net.yzimroni.buildsomething2.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -16,6 +15,8 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.nbt.NbtCompound;
 import com.comphenix.protocol.wrappers.nbt.NbtFactory;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 
 public class BSProtocolLib {
 	private BuildSomethingPlugin plugin;

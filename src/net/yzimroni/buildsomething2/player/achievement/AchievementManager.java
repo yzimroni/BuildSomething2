@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.UUID;
 
+import org.bukkit.event.Listener;
+
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.blocks.BSBlock;
 import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
@@ -11,8 +13,6 @@ import net.yzimroni.buildsomething2.game.effects.effects.Effect;
 import net.yzimroni.buildsomething2.game.games.Game;
 import net.yzimroni.buildsomething2.player.BPlayer;
 import net.yzimroni.buildsomething2.player.TopPlayers;
-
-import org.bukkit.event.Listener;
 
 public class AchievementManager implements Listener {
 	
@@ -28,8 +28,13 @@ public class AchievementManager implements Listener {
 		} else {
 			boolean haveAchievement = false;
 			try {
-				ResultSet rs = plugin.getDB().get("SELECT ID FROM achievements WHERE UUID='" + u.toString() + "' AND achievement='" + info.getAchievement().name() + "'");
+				PreparedStatement pre = plugin.getDB().getPrepare("SELECT ID FROM achievements WHERE UUID=? AND achievement=?");
+				pre.setString(1, u.toString());
+				pre.setString(2, info.getAchievement().name());
+				ResultSet rs = pre.executeQuery();
 				haveAchievement = rs.next();
+				rs.close();
+				pre.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("failed add achievement " + info + " to player " + u);

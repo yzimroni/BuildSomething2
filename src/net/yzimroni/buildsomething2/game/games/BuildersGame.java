@@ -6,25 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
-import net.yzimroni.buildsomething2.game.Builders;
-import net.yzimroni.buildsomething2.game.GameInfo.GameType;
-import net.yzimroni.buildsomething2.game.GameInfo.PlotType;
-import net.yzimroni.buildsomething2.game.GameManager;
-import net.yzimroni.buildsomething2.game.Gamemode;
-import net.yzimroni.buildsomething2.game.PlayerInfo;
-import net.yzimroni.buildsomething2.game.blocks.BSBlock;
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.worldedit.WorldEditBonus;
-import net.yzimroni.buildsomething2.game.effects.effects.Effect;
-import net.yzimroni.buildsomething2.game.plots.PlotInfo;
-import net.yzimroni.buildsomething2.game.plots.PlotManager;
-import net.yzimroni.buildsomething2.player.BPlayer;
-import net.yzimroni.buildsomething2.player.economy.RewardInfo;
-import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
-import net.yzimroni.buildsomething2.utils.JsonBuilder;
-import net.yzimroni.buildsomething2.utils.JsonBuilder.ClickAction;
-import net.yzimroni.buildsomething2.utils.Utils;
-import net.yzimroni.buildsomething2.utils.WorldEditClipboard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -48,6 +29,26 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldguard.domains.DefaultDomain;
+
+import net.yzimroni.buildsomething2.game.Builders;
+import net.yzimroni.buildsomething2.game.GameInfo.GameType;
+import net.yzimroni.buildsomething2.game.GameInfo.PlotType;
+import net.yzimroni.buildsomething2.game.GameManager;
+import net.yzimroni.buildsomething2.game.Gamemode;
+import net.yzimroni.buildsomething2.game.PlayerInfo;
+import net.yzimroni.buildsomething2.game.blocks.BSBlock;
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.worldedit.WorldEditBonus;
+import net.yzimroni.buildsomething2.game.effects.effects.Effect;
+import net.yzimroni.buildsomething2.game.plots.PlotInfo;
+import net.yzimroni.buildsomething2.game.plots.PlotManager;
+import net.yzimroni.buildsomething2.player.BPlayer;
+import net.yzimroni.buildsomething2.player.economy.RewardInfo;
+import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
+import net.yzimroni.buildsomething2.utils.JsonBuilder;
+import net.yzimroni.buildsomething2.utils.JsonBuilder.ClickAction;
+import net.yzimroni.buildsomething2.utils.Utils;
+import net.yzimroni.buildsomething2.utils.WorldEditClipboard;
 public class BuildersGame extends Game {
 	
 	private int buildersCount;
@@ -197,7 +198,7 @@ public class BuildersGame extends Game {
 				} else {
 					int give = 0;
 					for (Entry<Integer, BSBlock> i : hotbar.entrySet()) {
-						if (manager.getBlockManager().hasBlockAndFree(builder, i.getValue())) {
+						if (manager.getBlockManager().hasBlockOrFree(builder, i.getValue())) {
 							builder.getPlayer().getInventory().setItem(i.getKey(), i.getValue().toItemStack());
 							give++;
 						}
@@ -496,7 +497,7 @@ public class BuildersGame extends Game {
 	@Override
 	public void onPlayerIneract(final PlayerInteractEvent e) {
 		if (e.getHand() != EquipmentSlot.HAND) {
-			return; //TODO
+			return; //TODO handle second hand properly
 		}
 		if (check(e.getPlayer())) {
 			if (e.getPlayer().getGameMode() == GameMode.SURVIVAL && isBuilder(e.getPlayer())) {
@@ -506,7 +507,7 @@ public class BuildersGame extends Game {
 						sendBlockUpdateWool(e.getPlayer(), e.getClickedBlock().getLocation());
 						return;
 					}
-					if (map.getOutlineBorderBlocks().contains(e.getClickedBlock().getLocation().add(0, -1, 0).getBlock())) {
+					if (map.getOutlineBorderBlocks().contains(e.getClickedBlock().getLocation().add(0, -1, 0))) {
 						e.setCancelled(true);
 						sendBlockUpdateWool(e.getPlayer(), e.getClickedBlock().getLocation().add(0, -1, 0));
 						return;
@@ -525,7 +526,7 @@ public class BuildersGame extends Game {
 					@SuppressWarnings("deprecation")
 					BSBlock b = manager.getBlockManager().getByType(e.getClickedBlock().getType(), e.getClickedBlock().getData());
 					if (b != null) {
-						if (manager.getBlockManager().hasBlockAndFree(plugin.getPlayerManager().getPlayer(e.getPlayer()), b)) {
+						if (manager.getBlockManager().hasBlockOrFree(plugin.getPlayerManager().getPlayer(e.getPlayer()), b)) {
 							ItemStack i = b.toItemStack();
 							i.setAmount(64);
 							e.getPlayer().setItemInHand(i);

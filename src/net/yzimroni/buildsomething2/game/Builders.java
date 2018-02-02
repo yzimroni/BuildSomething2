@@ -3,6 +3,7 @@ package net.yzimroni.buildsomething2.game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.entity.Player;
 
@@ -56,15 +57,7 @@ public class Builders {
 	}
 	
 	public int size() {
-		int i = 0;
-		
-		for (BPlayer bp : builders) {
-			if (bp.getPlayer() != null) {
-				i++;
-			}
-		}
-		
-		return i;
+		return getBPlayers().size();
 	}
 	
 	public boolean isEmpty() {
@@ -72,33 +65,15 @@ public class Builders {
 	}
 	
 	public List<BPlayer> getBPlayers() {
-		List<BPlayer> bps = new ArrayList<BPlayer>();
-		for (BPlayer bp : builders) {
-			if (bp.getPlayer() != null) {
-				bps.add(bp);
-			}
-		}
-		return bps;
+		return builders.stream().filter(b -> b.getPlayer() != null).collect(Collectors.toList());
 	}
 	
 	public List<Player> getPlayers() {
-		List<Player> bps = new ArrayList<Player>();
-		for (BPlayer bp : builders) {
-			if (bp.getPlayer() != null) {
-				bps.add(bp.getPlayer());
-			}
-		}
-		return bps;
+		return getBPlayers().stream().map(BPlayer::getPlayer).collect(Collectors.toList());
 	}
 	
 	public List<UUID> getUUIDs() {
-		List<UUID> uds = new ArrayList<UUID>();
-		for (BPlayer bp : builders) {
-			if (bp.getPlayer() != null) {
-				uds.add(bp.getUUID());
-			}
-		}
-		return uds;
+		return getBPlayers().stream().map(BPlayer::getUUID).collect(Collectors.toList());
 	}
 	
 	public void removeBuilder(Player p) {

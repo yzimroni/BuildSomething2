@@ -1,16 +1,16 @@
 package net.yzimroni.buildsomething2.game.bonuses.bonuses;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.bonuses.BonusUser;
 import net.yzimroni.buildsomething2.game.games.BuildersGame;
 import net.yzimroni.buildsomething2.game.games.Game;
 import net.yzimroni.buildsomething2.player.BPlayer;
 import net.yzimroni.buildsomething2.utils.MaterialData;
-
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public abstract class Bonus {
 	

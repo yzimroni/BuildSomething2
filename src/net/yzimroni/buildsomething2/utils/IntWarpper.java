@@ -5,7 +5,7 @@ public class IntWarpper {
 	private int value;
 
 	public IntWarpper() {
-		value = 0;
+
 	}
 
 	public IntWarpper(int id) {

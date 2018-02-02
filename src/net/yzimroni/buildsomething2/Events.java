@@ -1,9 +1,5 @@
 package net.yzimroni.buildsomething2;
 
-import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
-import net.yzimroni.buildsomething2.player.BPlayer;
-import net.yzimroni.buildsomething2.utils.Utils;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,9 +12,12 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 
+import net.yzimroni.buildsomething2.game.bonuses.bonuses.Bonus;
+import net.yzimroni.buildsomething2.player.BPlayer;
+import net.yzimroni.buildsomething2.utils.Utils;
+
 public class Events implements Listener {
 	private BuildSomethingPlugin plugin;
-	//Location ld = null; //TO DO remove
 	
 	public Events(BuildSomethingPlugin p) {
 		plugin = p;
@@ -27,12 +26,10 @@ public class Events implements Listener {
 	@EventHandler
 	public void onDamage(EntityDamageEvent event) {
 		if (event.getEntity() instanceof Player) {
-			if (event.getCause() != EntityDamageEvent.DamageCause.SUICIDE) {
-				event.setCancelled(true);
-			}
-			
 			if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
 				Utils.teleportSpawn(((Player) event.getEntity()));
+				event.setCancelled(true);
+			} else if (event.getCause() != EntityDamageEvent.DamageCause.SUICIDE) {
 				event.setCancelled(true);
 			}
 		}
@@ -41,20 +38,21 @@ public class Events implements Listener {
 	@EventHandler
 	public void onHunger(FoodLevelChangeEvent e) {
 		e.setFoodLevel(20);
-		e.setCancelled(true);
 	}
 	
 	@EventHandler
 	public void onItemCraft(CraftItemEvent e) {
 		if (e.getWhoClicked() instanceof Player) {
 			Player p = (Player) e.getWhoClicked();
-			if (!p.isOp())
+			if (!p.isOp()) {
 				e.setCancelled(true);
+			}
 		}
 	}
 	
 	@EventHandler
 	public void cmd(final PlayerCommandPreprocessEvent e) {
+		// TODO Make it a proper command or deleting them (some of them are just for testing/debugging)
 		if (!e.getPlayer().isOp()) return;
 		if (e.getMessage().equalsIgnoreCase("/fly")) {
 			e.setCancelled(true);

@@ -6,7 +6,8 @@
 
 package net.yzimroni.buildsomething2.utils;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Map;
+
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -15,7 +16,7 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Class to get the displayed name (as the client shows) for an item.

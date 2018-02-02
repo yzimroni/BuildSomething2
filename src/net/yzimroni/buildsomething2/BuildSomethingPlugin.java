@@ -2,6 +2,17 @@ package net.yzimroni.buildsomething2;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
 import net.yzimroni.buildsomething2.command.CommandManager;
 import net.yzimroni.buildsomething2.game.GameManager;
 import net.yzimroni.buildsomething2.player.PlayerManager;
@@ -10,18 +21,6 @@ import net.yzimroni.buildsomething2.scoreboard.ScoreboardManager;
 import net.yzimroni.buildsomething2.utils.ActionBar;
 import net.yzimroni.buildsomething2.utils.BSProtocolLib;
 import net.yzimroni.buildsomething2.utils.MCSQL;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
-import org.bukkit.event.player.PlayerPreLoginEvent;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 
 public class BuildSomethingPlugin extends JavaPlugin {
 	public final Logger log = Logger.getLogger("BuildSomething");
@@ -41,10 +40,12 @@ public class BuildSomethingPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		try {
-			sql = new MCSQL("127.0.0.1", "3306", "buildsomething" /* db */, "buildsomething" /* user */, "jUaFJGNhfRZmfFHH");
+			sql = new MCSQL(getConfig().getString("mysql.host"), getConfig().getString("mysql.port"),
+					getConfig().getString("mysql.db"), getConfig().getString("mysql.username"),
+					getConfig().getString("mysql.password"));
 			sql.openConnecting();
 		} catch (Exception e) {
-			log.info("cant connect to the DB");
+			log.info("Can't connect to the database");
 			e.printStackTrace();
 			Bukkit.setWhitelist(true);
 			Bukkit.getPluginManager().registerEvents(new Listener() {
@@ -87,26 +88,16 @@ public class BuildSomethingPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		protocollib.removePacketListeners(this);
-		protocollib = null;
-		commandmanager = null;
 		gamemanager.onDisable();
-		gamemanager = null;
-		events = null;
 		playermanager.onDisable();
-		playermanager = null;
-		actionbar.onDisable();
-		actionbar = null;
-		bsprotocollib = null;
-		top = null;
 		if (sql != null){
 			sql.closeConnecting();
 		}
-		sql = null;
 	}
 		
 	public String hebrewMessage(Player p, String s) {
 		String lang = p.spigot().getLocale();
-		boolean rev = needRevrese(lang);
+		boolean rev = shouldReverse(lang);
 		if (rev) {
 			return new StringBuilder(s).reverse().toString();
 		} else {
@@ -114,7 +105,7 @@ public class BuildSomethingPlugin extends JavaPlugin {
 		}
 	}
 	
-	private boolean needRevrese(String lang) {
+	private boolean shouldReverse(String lang) {
 		switch (lang) {
 		case "he_IL":
 			return false;

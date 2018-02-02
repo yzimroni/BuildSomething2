@@ -3,6 +3,10 @@ package net.yzimroni.buildsomething2.command;
 import java.util.HashMap;
 import java.util.UUID;
 
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.Gamemode;
 import net.yzimroni.buildsomething2.game.Word;
@@ -20,10 +24,6 @@ import net.yzimroni.commandmanager.command.methodexecutor.MethodExecutor;
 import net.yzimroni.commandmanager.command.methodexecutor.MethodExecutorClass;
 import net.yzimroni.commandmanager.command.methodexecutor.MethodId;
 import net.yzimroni.commandmanager.manager.CommandManager;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 
 public class GameCommand implements MethodExecutorClass {
 	private BuildSomethingPlugin plugin;
@@ -256,7 +256,7 @@ public class GameCommand implements MethodExecutorClass {
 			g.stop(true, false);
 			sender.sendMessage("Game stopped");
 		} else {
-			sender.sendMessage("The game not running");
+			sender.sendMessage("The game is not running");
 		}
 
 	}
@@ -313,7 +313,7 @@ public class GameCommand implements MethodExecutorClass {
 		Game g = data.getGame();
 
 		if (!(g instanceof BuildersGame)) {
-			sender.sendMessage("This is not builders game!");
+			sender.sendMessage("This is not a builders game!");
 			return;
 		}
 
@@ -330,7 +330,7 @@ public class GameCommand implements MethodExecutorClass {
 		Game g = data.getGame();
 
 		if (!(g instanceof BuildersGame)) {
-			sender.sendMessage("This is not builders game!");
+			sender.sendMessage("This is not a builders game!");
 			return;
 		}
 
@@ -355,7 +355,7 @@ public class GameCommand implements MethodExecutorClass {
 		Game g = data.getGame();
 
 		if (!(g instanceof BuildersGame)) {
-			sender.sendMessage("This is not builders game!");
+			sender.sendMessage("This is not a builders game!");
 			return;
 		}
 
@@ -385,7 +385,7 @@ public class GameCommand implements MethodExecutorClass {
 		Game g = data.getGame();
 
 		if (!(g instanceof BuildersGame)) {
-			sender.sendMessage("This is not builders game!");
+			sender.sendMessage("This is not a builders game!");
 			return;
 		}
 
@@ -446,7 +446,7 @@ public class GameCommand implements MethodExecutorClass {
 
 		Player p = args.get("player", Player.class);
 		if (p == null) {
-			sender.sendMessage("invalid player");
+			sender.sendMessage("Invalid player");
 			return;
 		}
 		if (g.check(p)) {

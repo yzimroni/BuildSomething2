@@ -3,18 +3,18 @@ package net.yzimroni.buildsomething2.game.effects.effects;
 import java.util.Arrays;
 import java.util.List;
 
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Builder;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.FireworkEffect.Builder;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 
 public class Firework extends Effect {
 	public Firework(BuildSomethingPlugin p) {

@@ -4,19 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import net.yzimroni.buildsomething2.game.BotPlot;
-import net.yzimroni.buildsomething2.game.GameInfo.GameType;
-import net.yzimroni.buildsomething2.game.GameInfo.PlotType;
-import net.yzimroni.buildsomething2.game.GameManager;
-import net.yzimroni.buildsomething2.game.Gamemode;
-import net.yzimroni.buildsomething2.game.PlayerInfo;
-import net.yzimroni.buildsomething2.game.effects.effects.lib.ParticleEffect;
-import net.yzimroni.buildsomething2.player.economy.RewardInfo;
-import net.yzimroni.buildsomething2.utils.BlockLocation;
-import net.yzimroni.buildsomething2.utils.Cuboid;
-import net.yzimroni.buildsomething2.utils.IntWarpper;
-import net.yzimroni.buildsomething2.utils.Utils;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -27,11 +14,22 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.util.Vector;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.worldcretornica.plotme_core.Plot;
 import com.worldcretornica.plotme_core.PlotMeCoreManager;
+
+import net.yzimroni.buildsomething2.game.BotPlot;
+import net.yzimroni.buildsomething2.game.GameInfo.GameType;
+import net.yzimroni.buildsomething2.game.GameInfo.PlotType;
+import net.yzimroni.buildsomething2.game.GameManager;
+import net.yzimroni.buildsomething2.game.Gamemode;
+import net.yzimroni.buildsomething2.game.PlayerInfo;
+import net.yzimroni.buildsomething2.player.economy.RewardInfo;
+import net.yzimroni.buildsomething2.utils.BlockLocation;
+import net.yzimroni.buildsomething2.utils.Cuboid;
+import net.yzimroni.buildsomething2.utils.IntWarpper;
+import net.yzimroni.buildsomething2.utils.Utils;
 
 public class BotGame extends Game {
 	

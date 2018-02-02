@@ -2,7 +2,6 @@ package net.yzimroni.buildsomething2.game.bonuses.bonuses;
 
 import org.bukkit.Material;
 
-
 import net.yzimroni.buildsomething2.BuildSomethingPlugin;
 import net.yzimroni.buildsomething2.game.bonuses.BonusUser;
 import net.yzimroni.buildsomething2.game.games.Game;

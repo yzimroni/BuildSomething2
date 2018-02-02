@@ -1,16 +1,16 @@
 package net.yzimroni.buildsomething2.command;
 
-import net.yzimroni.buildsomething2.BuildSomethingPlugin;
-import net.yzimroni.buildsomething2.player.PlayerData;
-import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
-import net.yzimroni.buildsomething2.utils.Utils;
-
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import net.yzimroni.buildsomething2.BuildSomethingPlugin;
+import net.yzimroni.buildsomething2.player.PlayerData;
+import net.yzimroni.buildsomething2.player.stats.GameTypeStats;
+import net.yzimroni.buildsomething2.utils.Utils;
 
 public class StatsCommand implements CommandExecutor {
 	private BuildSomethingPlugin plugin;

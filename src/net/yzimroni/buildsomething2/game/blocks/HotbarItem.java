@@ -4,10 +4,10 @@ import org.bukkit.inventory.ItemStack;
 
 public interface HotbarItem {
 
-	public ItemStack toItemStack();
+	ItemStack toItemStack();
 	
-	public int getId();
+	int getId();
 	
-	public String getTypeName();
+	String getTypeName();
 	
 }
